@@ -5,6 +5,7 @@ import socket
 import platform
 import sys
 import re
+from glob import glob
 
 def hostname():
 #    with open('/etc/motd', 'w') as motd:
@@ -99,10 +100,40 @@ def fail2ban_status():
            print("fail2ban: [active], total banned [%s], currently banned [%s]" % (banned, banned_cur) )
 
 def users():
-    cmd_run = '/usr/bin/who | /usr/bin/cut -d" " -f1 | /usr/bin/uniq'
+    cmd_run = '/usr/bin/users'
     proc_running = subprocess.Popen(cmd_run, shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     users = proc_running.communicate()[0].decode('utf-8').strip()
     return(users)
+
+
+rootdir_pattern = re.compile('^.*?/devices')
+internal_devices = []
+
+def device_state(name):
+    with open('/sys/block/%s/device/block/%s/removable' % (name, name)) as f:
+        if f.read(1) == '1':
+            return
+
+    path = rootdir_pattern.sub('', os.readlink('/sys/block/%s' % name))
+    hotplug_buses = ("usb", "ieee1394", "mmc", "pcmcia", "firewire")
+    for bus in hotplug_buses:
+        if os.path.exists('/sys/bus/%s' % bus):
+            for device_bus in os.listdir('/sys/bus/%s/devices' % bus):
+                device_link = rootdir_pattern.sub('', os.readlink(
+                    '/sys/bus/%s/devices/%s' % (bus, device_bus)))
+                if re.search(device_link, path):
+                    return
+    internal_devices.append(name)
+
+def show_hdd_temp():
+    for path in glob('/sys/block/*/device'):
+        name = re.sub('.*/(.*?)/device', '\g<1>', path)
+        device_state(name)
+    for hdd in internal_devices:
+        cmd_hdd = 'hddtemp -u C -nq /dev/%s' % hdd
+        proc_running = subprocess.Popen(cmd_hdd, shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        temperatures = proc_running.communicate()[0].decode('utf-8').strip()
+        print("Disk: [/dev/%s] temperature [%sC]" % (hdd, temperatures))
 
 def print_motd():
     print("Hostname:", (hostname()))
@@ -114,8 +145,11 @@ def print_motd():
     print("Uptime: ", (uptime()))
     print("Load Averages: ", (getloadavg()))
     print("Logged users:", users())
+    if(os.path.isfile("/usr/bin/hddtemp")):
+       show_hdd_temp()
 
 #hostname()
+#show_hdd_temp()
 #public_ip()
 print_motd()
 #fail2ban_status()
