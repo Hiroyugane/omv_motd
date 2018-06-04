@@ -105,7 +105,6 @@ def users():
     users = proc_running.communicate()[0].decode('utf-8').strip()
     return(users)
 
-
 rootdir_pattern = re.compile('^.*?/devices')
 internal_devices = []
 
