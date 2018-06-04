@@ -52,9 +52,37 @@ def getloadavg():
 	return('{} {} {}'.format(r[0],r[1],r[2]))
 
 def get_processes():
-    cmd_ps = 'ps -Afl | wc -l'
+    cmd_ps = '/bin/ps -Afl | wc -l'
     proc_ps = subprocess.Popen(cmd_ps, shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].decode('utf-8').strip()
     print("Processes: [%s]" % (proc_ps))
+
+def uptime():
+    try:
+        f = open( "/proc/uptime" )
+        contents = f.read().split()
+        f.close()
+    except:
+       return "Cannot open uptime file: /proc/uptime"
+    total_seconds = float(contents[0])
+    # Helper vars:
+    MINUTE  = 60
+    HOUR    = MINUTE * 60
+    DAY     = HOUR * 24
+
+    # Get the days, hours, etc:
+    days    = int( total_seconds / DAY )
+    hours   = int( ( total_seconds % DAY ) / HOUR )
+    minutes = int( ( total_seconds % HOUR ) / MINUTE )
+    seconds = int( total_seconds % MINUTE )
+    # Build up the pretty string (like this: "N days, N hours, N minutes, N seconds")
+    string = ""
+    if days > 0:
+        string += str(days) + " " + (days == 1 and "day" or "days" ) + ", "
+    if len(string) > 0 or hours > 0:
+        string += str(hours) + " " + (hours == 1 and "hour" or "hours" ) + ", "
+    if len(string) > 0 or minutes > 0:
+        string += str(minutes) + " " + (minutes == 1 and "minute" or "minutes" )
+    return string;
 
 def fail2ban_status():
     if(os.path.isfile("/usr/bin/fail2ban-client")):
@@ -70,6 +98,12 @@ def fail2ban_status():
            banned_cur = category_match2.group(1)
            print("fail2ban: [active], total banned [%s], currently banned [%s]" % (banned, banned_cur) )
 
+def users():
+    cmd_run = '/usr/bin/who | /usr/bin/cut -d" " -f1 | /usr/bin/uniq'
+    proc_running = subprocess.Popen(cmd_run, shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    users = proc_running.communicate()[0].decode('utf-8').strip()
+    return(users)
+
 def print_motd():
     print("Hostname:", (hostname()))
     print("Public IP:", (public_ip()))
@@ -77,7 +111,9 @@ def print_motd():
     platform_version()
     get_processes()
     fail2ban_status()
+    print("Uptime: ", (uptime()))
     print("Load Averages: ", (getloadavg()))
+    print("Logged users:", users())
 
 #hostname()
 #public_ip()
