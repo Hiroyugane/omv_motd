@@ -5,12 +5,87 @@ import socket
 import platform
 import sys
 import re
+import math
+import random
+import textwrap
 from glob import glob
 
-def hostname():
-#    with open('/etc/motd', 'w') as motd:
-#          motd.write(socket.gethostname())
-    return socket.gethostname()
+COLORS = {
+    'bold': "\033[01m",
+    'black': "\033[30m",
+    'red': "\033[31m",
+    'green': "\033[32m",
+    'yellow': "\033[33m",
+    'blue': "\033[34m",
+    'purple': "\033[35m",
+    'cyan': "\033[36m",
+    'white': "\033[37m",
+    'reset': "\033[0m",
+    'system': "\033[38;5;120m"}
+
+# colorize
+def colored(col, s):
+    return COLORS[col] + s + COLORS['reset']
+
+def humanise(num):
+    """Human-readable size conversion."""
+    for x in ['bytes','KB','MB','GB','TB']:
+        if num < 1024.0:
+            return "%3.1f%s" % (num, x)
+        num /= 1024.0
+
+def smartlen(line):
+    line = line.replace("\t", ' '*4)
+    for color in COLORS.keys():
+        line = line.replace(COLORS[color], '')
+    return len(line)
+
+def column_display(rows, num_columns=2):
+    """Horrible fluid column layout code ahoy!"""
+    columns = []
+
+    column = []
+    for row in rows:
+        column.append(row)
+        if len(column) >= math.floor(float(len(rows))/num_columns):
+            columns.append(column)
+            column = []
+    if len(column) > 0: columns.append(column)
+
+    col_texts = []
+    for col in columns:
+        coltext = []
+        max_keylen = max([len(row[0]) for row in col])
+        for row in col:
+            padding = ' '*(max_keylen-len(row[0]))
+            coltext.append("%s: %s%s" % (row[0], padding, row[1]))
+        col_texts.append(coltext)
+
+    result = ""
+    for i in range(len(col_texts[0])):
+        line = ""
+
+        for j, coltext in enumerate(col_texts):
+            if i < len(coltext):
+                if j > 0:
+                    max_vallen = max([len(row[1]) for row in columns[j-1]])
+                    vallen = len(columns[j-1][i][1])
+                    line += "\t"*max([1, int(math.floor(float(max_vallen-vallen)/4))])
+                line += coltext[i]
+        result += line + "\n"
+
+    return result
+
+def center_by(width, uncentered):
+    result = ""
+    lines = uncentered.split("\n")
+    length = max([smartlen(line) for line in lines])
+    for line in lines:
+        result += ' '*int((width-length)/2) + line + "\n"
+    return result
+
+def run_cmd(cmd):
+    return subprocess.check_output(cmd, shell=True, stderr=subprocess.PIPE).decode('utf-8').strip()
 
 # return ip from external interace
 def public_ip():
@@ -29,81 +104,103 @@ def service_active(service):
 
 def docker_status():
     if(os.path.isfile("/usr/bin/docker")):
-        cmd_ver = 'rpm -qa --queryformat "%{VERSION}" docker'
-        proc_version = subprocess.Popen(cmd_ver, shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        docker_ver = proc_version.communicate()[0].decode('utf-8').strip()
-
-        cmd_run = '/usr/bin/docker ps -q $1 | wc -l'
-        proc_running = subprocess.Popen(cmd_run, shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        docker_run = proc_running.communicate()[0].decode('utf-8').strip()
+        # docker version
+        docker_ver = run_cmd('rpm -qa --queryformat "%{VERSION}" docker')
+        # running containers
+        docker_run = int(run_cmd('/usr/bin/docker ps -q $1 | wc -l'))
         if service_active('docker.service'):
-            print("docker: [active]" + " " + "version: [%s] running: [%s]" % (docker_ver, docker_run))
+            docker = {'status': 'status: %s, ' % (str('[active]')), 
+                      'version': 'version [%s]' % (str(docker_ver)), 
+                      'running': 'running containers: [%s] ' % (str(docker_run))}
+            return(docker)
         else:
-            print("docker: [inactive]")
+            docker = {'[inactive]'}
+            return(docker)
 
 def platform_version():
-    cmd_product = 'rpm --eval %product_product'
-    cmd_version = 'rpm --eval %product_version'
-    proc_version = subprocess.Popen(cmd_product, shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].decode('utf-8').strip()
-    proc_product = subprocess.Popen(cmd_version, shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].decode('utf-8').strip()
+    proc_product = run_cmd('rpm --eval %product_product')
+    proc_version = run_cmd('rpm --eval %product_version')
+    os_release = {''}
     print("OS: %s %s for [%s]" % (proc_version, proc_product, platform.machine()))
 
-def getloadavg():
-	r = os.getloadavg()
-	return('{} {} {}'.format(r[0],r[1],r[2]))
+def sysinfo():
+    raw_loadavg = run_cmd("cat /proc/loadavg").split()
+    # load
+    load = {'1min': float(raw_loadavg[0]),
+            '5min': float(raw_loadavg[1]),
+            '15min': float(raw_loadavg[2])}
+    # /home
+    raw_home = run_cmd("/bin/df -P /home | tail -1").split()
+    raw_home_human = run_cmd("/bin/df -Ph /home | tail -1").split()
+    home = {'used': int(raw_home[2]),
+            'total': int(raw_home[1]),
+            'used_human': raw_home_human[2],
+            'total_human': raw_home_human[1],}
+    home['ratio'] = float(home['used'])/home['total']
+    # memory
+    raw_free = run_cmd("/bin/free -b").split("\n")
+    raw_mem = raw_free[1].split()
+    raw_swap = raw_free[2].split()
 
-def get_processes():
-    cmd_ps = '/bin/ps -Afl | wc -l'
-    proc_ps = subprocess.Popen(cmd_ps, shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].decode('utf-8').strip()
-    print("Processes: [%s]" % (proc_ps))
+    memory = {'used': int(raw_mem[1])-int(raw_mem[2]),
+              'total': int(raw_mem[1])}
 
-def uptime():
-    try:
-        f = open( "/proc/uptime" )
-        contents = f.read().split()
-        f.close()
-    except:
-       return "Cannot open uptime file: /proc/uptime"
-    total_seconds = float(contents[0])
-    # Helper vars:
-    MINUTE  = 60
-    HOUR    = MINUTE * 60
-    DAY     = HOUR * 24
+    memory['ratio'] = float(memory['used'])/memory['total']
+    swap = {'used': int(raw_swap[2]),
+            'total': int(raw_swap[1])}
 
-    # Get the days, hours, etc:
-    days    = int( total_seconds / DAY )
-    hours   = int( ( total_seconds % DAY ) / HOUR )
-    minutes = int( ( total_seconds % HOUR ) / MINUTE )
-    seconds = int( total_seconds % MINUTE )
-    # Build up the pretty string (like this: "N days, N hours, N minutes, N seconds")
-    string = ""
-    if days > 0:
-        string += str(days) + " " + (days == 1 and "day" or "days" ) + ", "
-    if len(string) > 0 or hours > 0:
-        string += str(hours) + " " + (hours == 1 and "hour" or "hours" ) + ", "
-    if len(string) > 0 or minutes > 0:
-        string += str(minutes) + " " + (minutes == 1 and "minute" or "minutes" )
-    return string;
+    swap['ratio'] = 0.0 if swap['total'] == 0 else float(swap['used'])/swap['total']
+    proc_ps = run_cmd('/bin/ps -Afl | wc -l')
+
+    logged_users = run_cmd('/usr/bin/users')
+    users = {
+             'active': len(set(logged_users))
+            }
+
+    rows = []
+    raw_uptime = run_cmd('uptime')
+    uptime = raw_uptime.split(',')[0].split('up')[1].strip()
+   # rows.append(['Total Users', str(users['total'])])
+    rows.append(['Active Users', str(users['active'])])
+    rows.append(['Process Count', str(proc_ps)])
+    rows.append(['Uptime', uptime])
+    rows.append(['Hostname', socket.gethostname()])
+    #rows.append(['Docker', str(docker_status()['version'] + int(docker_status()['running'])])
+    rows.append(['Docker', str(docker_status()['running']) + str(docker_status()['status']) +  str(docker_status()['version'])])
+
+    # colorize
+    if load['1min'] < 0.4: load['color'] = 'green'
+    elif load['1min'] < 0.8: load['color'] = 'yellow'
+    else: load['color'] = 'red'
+
+    rows.append(['System Load', colored(load['color'], str(load['1min']))])
+
+    if home['ratio'] < 0.4: home['color'] = 'green'
+    elif home['ratio'] < 0.8: home['color'] = 'yellow'
+    else: home['color'] = 'red'
+
+    rows.append(["/home Usage", colored(home['color'], "%d%% of %s" % (home['ratio']*100, home['total_human']))])
+
+    if memory['ratio'] < 0.4: memory['color'] = 'green'
+    elif memory['ratio'] < 0.8: memory['color'] = 'yellow'
+    else: memory['color'] = 'red'
+
+    rows.append(['Memory Usage', colored(memory['color'], "%d%% of %s" % (memory['ratio']*100, humanise(memory['total'])))])
+    return(rows)
 
 def fail2ban_status():
     if(os.path.isfile("/usr/bin/fail2ban-client")):
         if service_active('fail2ban.service'):
            # get_fail2ban=$(fail2ban-client status sshd | grep -i "Total banned" | awk '{printf $4}')
            # amount of banned ips
-           cmd_f2b = '/usr/bin/fail2ban-client status sshd'
-           f2ban_proc = subprocess.Popen(cmd_f2b, shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].decode('utf-8').strip()
+           f2ban_proc = run_cmd('/usr/bin/fail2ban-client status sshd')
            category_match = re.search('\W*Total banned[^:]*:\D*(\d+)', f2ban_proc)
            category_match2 = re.search('\W*Currently banned[^:]*:\D*(\d+)', f2ban_proc)
            # returns 0 if nothing there
            banned = category_match.group(1)
            banned_cur = category_match2.group(1)
-           print("fail2ban: [active], total banned [%s], currently banned [%s]" % (banned, banned_cur) )
+           #print("fail2ban: [active], total banned [%s], currently banned [%s]" % (banned, banned_cur) )
 
-def users():
-    cmd_run = '/usr/bin/users'
-    proc_running = subprocess.Popen(cmd_run, shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    users = proc_running.communicate()[0].decode('utf-8').strip()
-    return(users)
 
 rootdir_pattern = re.compile('^.*?/devices')
 internal_devices = []
@@ -129,10 +226,8 @@ def show_hdd_temp():
         name = re.sub('.*/(.*?)/device', '\g<1>', path)
         device_state(name)
     for hdd in internal_devices:
-        cmd_hdd = 'hddtemp -u C -nq /dev/%s' % hdd
-        proc_running = subprocess.Popen(cmd_hdd, shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        temperatures = proc_running.communicate()[0].decode('utf-8').strip()
-        print("Disk: [/dev/%s] temperature [%sC]" % (hdd, temperatures))
+        temperature = run_cmd('hddtemp -u C -nq /dev/%s' % hdd)
+        print("Disk: [/dev/%s] temperature [%sC]" % (hdd, temperature))
 
 def print_motd():
     print("Hostname:", (hostname()))
@@ -141,15 +236,23 @@ def print_motd():
     platform_version()
     get_processes()
     fail2ban_status()
-    print("Uptime: ", (uptime()))
-    print("Load Averages: ", (getloadavg()))
+    print("Uptime:", (uptime()))
+#    print("Load Averages:", (sysinfo()))
     print("Logged users:", users())
     if(os.path.isfile("/usr/bin/hddtemp")):
        show_hdd_temp()
 
+if __name__ == "__main__":
+    banner = colored('system', open("/tmp/motd_banner").read())
+    banner_length = max([smartlen(line) for line in banner.split("\n")])
+    info = center_by(banner_length, column_display(sysinfo(), num_columns=1))
+    output = banner + "\n" + info
+    print(output)
+
+#sysinfo()
 #hostname()
 #show_hdd_temp()
 #public_ip()
-print_motd()
+#print_motd()
 #fail2ban_status()
 #docker_status()
