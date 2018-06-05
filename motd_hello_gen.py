@@ -175,6 +175,7 @@ def sysinfo():
     rows.append(['Process Count', str(proc_ps)])
     rows.append(['Uptime', uptime])
     rows.append(['OS', os_release])
+    rows.append(['Public ip', public_ip()])
     rows.append(['Hostname', socket.gethostname()])
 
     # colorize
