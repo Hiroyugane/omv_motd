@@ -2,12 +2,8 @@
 import os
 import subprocess
 import socket
-import platform
-import sys
 import re
 import math
-import random
-import textwrap
 from glob import glob
 
 COLORS = {
@@ -23,22 +19,25 @@ COLORS = {
     'reset': "\033[0m",
     'system': "\033[38;5;120m"}
 
+
 # colorize
 def colored(col, s):
     return COLORS[col] + s + COLORS['reset']
 
+
 def humanise(num):
-    """Human-readable size conversion."""
-    for x in ['bytes','KB','MB','GB','TB']:
+    for x in ['bytes', 'KB', 'MB', 'GB', 'TB']:
         if num < 1024.0:
             return "%3.1f%s" % (num, x)
         num /= 1024.0
+
 
 def smartlen(line):
     line = line.replace("\t", ' '*4)
     for color in COLORS.keys():
         line = line.replace(COLORS[color], '')
     return len(line)
+
 
 def column_display(rows, num_columns=2):
     """Horrible fluid column layout code ahoy!"""
@@ -76,6 +75,7 @@ def column_display(rows, num_columns=2):
 
     return result
 
+
 def center_by(width, uncentered):
     result = ""
     lines = uncentered.split("\n")
@@ -84,8 +84,10 @@ def center_by(width, uncentered):
         result += ' '*int((width-length)/2) + line + "\n"
     return result
 
+
 def run_cmd(cmd):
     return subprocess.check_output(cmd, shell=True, stderr=subprocess.PIPE).decode('utf-8').strip()
+
 
 # return ip from external interace
 def public_ip():
@@ -93,14 +95,16 @@ def public_ip():
     s.connect(("8.8.8.8", 80))
     return s.getsockname()[0]
 
+
 def service_active(service):
     """Return True if service is running/waiting"""
     cmd = '/bin/systemctl is-active %s' % service
-    proc = subprocess.Popen(cmd, shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     proc.communicate()
     if proc.returncode == 0:
-       return True
+        return True
     return False
+
 
 def docker_status():
     if(os.path.isfile("/usr/bin/docker")):
@@ -114,6 +118,7 @@ def docker_status():
                   'wipe': 'exited containers [%s], ' % (str(docker_wipe)),
                   'running': 'running containers: [%s], ' % (str(docker_run))}
         return(docker)
+
 
 def fail2ban_status():
     if(os.path.isfile("/usr/bin/fail2ban-client")):
@@ -130,6 +135,7 @@ def fail2ban_status():
                  'current': 'currently banned: [%s]' % (str(banned_cur))}
         return(f2ban)
 
+
 def sysinfo():
     raw_loadavg = run_cmd("cat /proc/loadavg").split()
     # load
@@ -142,7 +148,7 @@ def sysinfo():
     home = {'used': int(raw_home[2]),
             'total': int(raw_home[1]),
             'used_human': raw_home_human[2],
-            'total_human': raw_home_human[1],}
+            'total_human': raw_home_human[1]}
     home['ratio'] = float(home['used'])/home['total']
     # memory
     raw_free = run_cmd("/bin/free -b").split("\n")
@@ -171,7 +177,7 @@ def sysinfo():
     rows = []
     raw_uptime = run_cmd('uptime')
     uptime = raw_uptime.split(',')[0].split('up')[1].strip()
-   # rows.append(['Total Users', str(users['total'])])
+    # rows.append(['Total Users', str(users['total'])])
     rows.append(['Active Users', str(users['active'])])
     rows.append(['Process Count', str(proc_ps)])
     rows.append(['Uptime', uptime])
@@ -208,12 +214,13 @@ def sysinfo():
     if service_active('fail2ban.service'):
        rows.append(['fail2ban', str(fail2ban_status()['status']) + str(fail2ban_status()['total']) +  str(fail2ban_status()['current'])])
     if service_active('docker.service'):
-       rows.append(['Docker', str(docker_status()['status']) + str(docker_status()['running']) + str(docker_status()['wipe']) +  str(docker_status()['version'])])
+       rows.append(['Docker', str(docker_status()['status']) + str(docker_status()['running']) + str(docker_status()['wipe']) + str(docker_status()['version'])])
 
     return(rows)
 
 rootdir_pattern = re.compile('^.*?/devices')
 internal_devices = []
+
 
 def device_state(name):
     with open('/sys/block/%s/device/block/%s/removable' % (name, name)) as f:
@@ -231,6 +238,7 @@ def device_state(name):
                     return
     internal_devices.append(name)
 
+
 def show_hdd_temp():
     for path in glob('/sys/block/*/device'):
         name = re.sub('.*/(.*?)/device', '\g<1>', path)
@@ -239,18 +247,11 @@ def show_hdd_temp():
         temperature = run_cmd('hddtemp -u C -nq /dev/%s' % hdd)
         print("Disk: [/dev/%s] temperature [%sC]" % (hdd, temperature))
 
+
 def print_motd():
-    print("Hostname:", (hostname()))
-    print("Public IP:", (public_ip()))
-    docker_status()
-    platform_version()
-    get_processes()
-    fail2ban_status()
-    print("Uptime:", (uptime()))
-#    print("Load Averages:", (sysinfo()))
-    print("Logged users:", users())
     if(os.path.isfile("/usr/bin/hddtemp")):
-       show_hdd_temp()
+        show_hdd_temp()
+
 
 if __name__ == "__main__":
     banner = colored('system', open("/tmp/motd_banner").read())
@@ -259,6 +260,7 @@ if __name__ == "__main__":
     output = banner + "\n" + info
     fail2ban_status()
     print(output)
+
 
 #sysinfo()
 #hostname()
