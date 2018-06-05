@@ -178,6 +178,7 @@ def sysinfo():
     rows.append(['OS', os_release])
     rows.append(['Public ip', public_ip()])
     rows.append(['Hostname', socket.gethostname()])
+    rows.append(['Kernel', run_cmd('uname -or')])
 
     # colorize
     if load['1min'] < 0.4: load['color'] = 'green'
