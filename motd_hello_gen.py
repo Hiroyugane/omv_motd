@@ -108,14 +108,25 @@ def docker_status():
         docker_ver = run_cmd('rpm -qa --queryformat "%{VERSION}" docker')
         # running containers
         docker_run = int(run_cmd('/usr/bin/docker ps -q $1 | wc -l'))
-        if service_active('docker.service'):
-            docker = {'status': 'status: %s, ' % (str('[active]')), 
-                      'version': 'version [%s]' % (str(docker_ver)), 
-                      'running': 'running containers: [%s] ' % (str(docker_run))}
-            return(docker)
-        else:
-            docker = {'[inactive]'}
-            return(docker)
+        docker = {'status': 'status: %s, ' % (str('[active]')), 
+                  'version': 'version [%s]' % (str(docker_ver)), 
+                  'running': 'running containers: [%s] ' % (str(docker_run))}
+        return(docker)
+
+def fail2ban_status():
+    if(os.path.isfile("/usr/bin/fail2ban-client")):
+        # get_fail2ban=$(fail2ban-client status sshd | grep -i "Total banned" | awk '{printf $4}')
+        # amount of banned ips
+        f2ban_proc = run_cmd('/usr/bin/fail2ban-client status sshd')
+        category_match = re.search('\W*Total banned[^:]*:\D*(\d+)', f2ban_proc)
+        category_match2 = re.search('\W*Currently banned[^:]*:\D*(\d+)', f2ban_proc)
+        # returns 0 if nothing there
+        banned = category_match.group(1)
+        banned_cur = category_match2.group(1)
+        f2ban = {'status': 'status: %s, ' % (str('[active]')),
+                 'total': 'banned total [%s] ' % (str(banned)),
+                 'current': 'currently banned: [%s]' % (str(banned_cur))}
+        return(f2ban)
 
 def platform_version():
     proc_product = run_cmd('rpm --eval %product_product')
@@ -165,8 +176,6 @@ def sysinfo():
     rows.append(['Process Count', str(proc_ps)])
     rows.append(['Uptime', uptime])
     rows.append(['Hostname', socket.gethostname()])
-    #rows.append(['Docker', str(docker_status()['version'] + int(docker_status()['running'])])
-    rows.append(['Docker', str(docker_status()['running']) + str(docker_status()['status']) +  str(docker_status()['version'])])
 
     # colorize
     if load['1min'] < 0.4: load['color'] = 'green'
@@ -186,21 +195,13 @@ def sysinfo():
     else: memory['color'] = 'red'
 
     rows.append(['Memory Usage', colored(memory['color'], "%d%% of %s" % (memory['ratio']*100, humanise(memory['total'])))])
+
+    if service_active('fail2ban.service'):
+       rows.append(['fail2ban', str(fail2ban_status()['status']) + str(fail2ban_status()['total']) +  str(fail2ban_status()['current'])])
+    if service_active('docker.service'):
+       rows.append(['Docker', str(docker_status()['status']) + str(docker_status()['running']) +  str(docker_status()['version'])])
+
     return(rows)
-
-def fail2ban_status():
-    if(os.path.isfile("/usr/bin/fail2ban-client")):
-        if service_active('fail2ban.service'):
-           # get_fail2ban=$(fail2ban-client status sshd | grep -i "Total banned" | awk '{printf $4}')
-           # amount of banned ips
-           f2ban_proc = run_cmd('/usr/bin/fail2ban-client status sshd')
-           category_match = re.search('\W*Total banned[^:]*:\D*(\d+)', f2ban_proc)
-           category_match2 = re.search('\W*Currently banned[^:]*:\D*(\d+)', f2ban_proc)
-           # returns 0 if nothing there
-           banned = category_match.group(1)
-           banned_cur = category_match2.group(1)
-           #print("fail2ban: [active], total banned [%s], currently banned [%s]" % (banned, banned_cur) )
-
 
 rootdir_pattern = re.compile('^.*?/devices')
 internal_devices = []
@@ -247,6 +248,7 @@ if __name__ == "__main__":
     banner_length = max([smartlen(line) for line in banner.split("\n")])
     info = center_by(banner_length, column_display(sysinfo(), num_columns=1))
     output = banner + "\n" + info
+    fail2ban_status()
     print(output)
 
 #sysinfo()
