@@ -130,12 +130,6 @@ def fail2ban_status():
                  'current': 'currently banned: [%s]' % (str(banned_cur))}
         return(f2ban)
 
-def platform_version():
-    proc_product = run_cmd('rpm --eval %product_product')
-    proc_version = run_cmd('rpm --eval %product_version')
-    os_release = {''}
-    print("OS: %s %s for [%s]" % (proc_version, proc_product, platform.machine()))
-
 def sysinfo():
     raw_loadavg = run_cmd("cat /proc/loadavg").split()
     # load
@@ -169,6 +163,9 @@ def sysinfo():
     users = {
              'active': len(set(logged_users))
             }
+    proc_product = run_cmd('rpm --eval %product_product')
+    proc_version = run_cmd('rpm --eval %product_version')
+    os_release = proc_product + ' ' + proc_version
 
     rows = []
     raw_uptime = run_cmd('uptime')
@@ -177,6 +174,7 @@ def sysinfo():
     rows.append(['Active Users', str(users['active'])])
     rows.append(['Process Count', str(proc_ps)])
     rows.append(['Uptime', uptime])
+    rows.append(['OS', os_release])
     rows.append(['Hostname', socket.gethostname()])
 
     # colorize
