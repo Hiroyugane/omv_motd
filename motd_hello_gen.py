@@ -157,6 +157,7 @@ def sysinfo():
             'total': int(raw_swap[1])}
 
     swap['ratio'] = 0.0 if swap['total'] == 0 else float(swap['used'])/swap['total']
+
     proc_ps = run_cmd('/bin/ps -Afl | wc -l')
 
     logged_users = run_cmd('/usr/bin/users')
@@ -194,6 +195,12 @@ def sysinfo():
     if memory['ratio'] < 0.4: memory['color'] = 'green'
     elif memory['ratio'] < 0.8: memory['color'] = 'yellow'
     else: memory['color'] = 'red'
+
+    if swap['ratio'] < 0.4: swap['color'] = 'green'
+    elif swap['ratio'] < 0.8: swap['color'] = 'yellow'
+    else: swap['color'] = 'red'
+
+    rows.append(["Swap Usage", colored(swap['color'], "%d%%" % (swap['ratio']*100))])
 
     rows.append(['Memory Usage', colored(memory['color'], "%d%% of %s" % (memory['ratio']*100, humanise(memory['total'])))])
 
