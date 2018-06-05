@@ -108,9 +108,11 @@ def docker_status():
         docker_ver = run_cmd('rpm -qa --queryformat "%{VERSION}" docker')
         # running containers
         docker_run = int(run_cmd('/usr/bin/docker ps -q $1 | wc -l'))
-        docker = {'status': 'status: %s, ' % (str('[active]')), 
-                  'version': 'version [%s]' % (str(docker_ver)), 
-                  'running': 'running containers: [%s] ' % (str(docker_run))}
+        docker_wipe = int(run_cmd('docker ps -a -q -f status=exited | wc -l'))
+        docker = {'status': 'status: %s, ' % (str('[active]')),
+                  'version': 'version [%s]' % (str(docker_ver)),
+                  'wipe': 'exited containers [%s], ' % (str(docker_wipe)),
+                  'running': 'running containers: [%s], ' % (str(docker_run))}
         return(docker)
 
 def fail2ban_status():
@@ -199,7 +201,7 @@ def sysinfo():
     if service_active('fail2ban.service'):
        rows.append(['fail2ban', str(fail2ban_status()['status']) + str(fail2ban_status()['total']) +  str(fail2ban_status()['current'])])
     if service_active('docker.service'):
-       rows.append(['Docker', str(docker_status()['status']) + str(docker_status()['running']) +  str(docker_status()['version'])])
+       rows.append(['Docker', str(docker_status()['status']) + str(docker_status()['running']) + str(docker_status()['wipe']) +  str(docker_status()['version'])])
 
     return(rows)
 
