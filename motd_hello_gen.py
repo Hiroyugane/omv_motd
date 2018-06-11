@@ -167,8 +167,10 @@ def sysinfo():
     proc_ps = run_cmd('/bin/ps -Afl | wc -l')
 
     logged_users = run_cmd('/usr/bin/users')
+    logged_names = run_cmd('/usr/bin/users | sort -u')
     users = {
-             'active': len(set(logged_users))
+             'active': len(set(logged_users)),
+             'logged': str(logged_names)
             }
     proc_product = run_cmd('rpm --eval %product_product')
     proc_version = run_cmd('rpm --eval %product_version')
@@ -178,7 +180,7 @@ def sysinfo():
     raw_uptime = run_cmd('uptime')
     uptime = raw_uptime.split(',')[0].split('up')[1].strip()
     # rows.append(['Total Users', str(users['total'])])
-    rows.append(['Active Users', str(users['active'])])
+    rows.append(['Active Users', str(users['active']) + ' [' + str(users['logged']) + ']'])
     rows.append(['Process Count', str(proc_ps)])
     rows.append(['Uptime', uptime])
     rows.append(['OS', os_release])
