@@ -136,6 +136,17 @@ def fail2ban_status():
         return(f2ban)
 
 
+def certificate_status():
+    cert_file = '/var/lib/openmandriva/omv/docker-nginx/abf.openmandriva.org-chain.pem'
+    if(os.path.isfile(cert_file)):
+        # amount of banned ips
+        certificate_text = run_cmd('openssl x509 -noout -in ' + cert_file +' -text')
+        category_match = re.search('\W*Not After[^:]*:(.+)', certificate_text)
+        due_date = category_match.group(1)
+        certificate = {'cert_expiration': '[%s]' % (str(due_date))}
+        return(certificate)
+
+
 def sysinfo():
     raw_loadavg = run_cmd("cat /proc/loadavg").split()
     # load
@@ -217,6 +228,9 @@ def sysinfo():
        rows.append(['fail2ban', str(fail2ban_status()['status']) + str(fail2ban_status()['total']) +  str(fail2ban_status()['current'])])
     if service_active('docker.service'):
        rows.append(['Docker', str(docker_status()['status']) + str(docker_status()['running']) + str(docker_status()['wipe']) + str(docker_status()['version'])])
+    # fix me
+    rows.append(['Certificate valid', str(certificate_status()['cert_expiration'])])
+#    rows.append(['HDD status', str(show_hdd_temp()['temp']) + str(show_hdd_temp()['disk'])])
 
     return(rows)
 
@@ -248,6 +262,11 @@ def show_hdd_temp():
     for hdd in internal_devices:
         temperature = run_cmd('hddtemp -u C -nq /dev/%s' % hdd)
         print("Disk: [/dev/%s] temperature [%sC]" % (hdd, temperature))
+        status = {
+                  'disk': 'disk: [%s]' % (str(hdd)),
+                  'temp': '[%s]C ' % (str(temperature)),
+                 }
+        return(status)
 
 
 def print_motd():
@@ -256,12 +275,16 @@ def print_motd():
 
 
 if __name__ == "__main__":
-    banner = colored('system', open("/tmp/motd_banner").read())
+    banner_file = '/etc/motd'
+    banner = colored('system', open(banner_file).read())
     banner_length = max([smartlen(line) for line in banner.split("\n")])
     info = center_by(banner_length, column_display(sysinfo(), num_columns=1))
     output = banner + "\n" + info
     fail2ban_status()
-    print(output)
+    f = open(banner_file, 'w')
+    f.write(info)
+    f.close()
+#    print(output)
 
 
 #sysinfo()
