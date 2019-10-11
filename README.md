@@ -8,9 +8,9 @@ This fork will become a customized and more structurized approach to the origina
 ## Roadmap-preview
 
 > this is an example-output of what the program should achieve to do when on version 1.0.0
-![Alt text](/image/roadmap-preview.png?raw=true "Ubuntu /etc/update-motd.d/")
+![Alt text](/images/roadmap-preview.png?raw=true "Ubuntu /etc/update-motd.d/")
 > For planned features, take a look at the todo.md in the root directory.
 
 ## Current version (synced fork)
 
-![Alt text](/image/0-0-0pre1.png?raw=true "Ubuntu /etc/update-motd.d/")
+![Alt text](/images/0-0-0pre1.png?raw=true "Ubuntu /etc/update-motd.d/")
