@@ -1,28 +1,16 @@
-## About this fork 
-This fork will become a customized and more structurized approach to the original motd(-python)-script 
+# Message of the python
 
-## This is the goal to achieve (NOT ACTUAL OUTPUT FROM BRANCH (yet))
-![Alt text](/image/demo.png?raw=true "OpenMandriva /etc/motd")
+## About this fork
 
+This fork will become a customized and more structurized approach to the original motd(-python)-script by fedya, which got forked
+(this rep got deleted and reforked a couple times the past days. It's been due to complications with being a beginner with github and privacy-stuff)
 
+## Roadmap-preview
+
+> this is an example-output of what the program should achieve to do when on version 1.0.0
+![Alt text](/image/roadmap-preview.png?raw=true "Ubuntu /etc/update-motd.d/")
+> For planned features, take a look at the todo.md in the root directory.
 
 ## Current version (synced fork)
-Copy script to bindir
 
-```bash
-# cp -v motd_hello_gen /usr/bin/
-```
-
-Copy motd service and timer files to systemd service dir
-
-```bash
-# cp motd.service motd.timer /etc/systemd/system/
-```
-
-Enable timer
-
-```bash
-# systemctl enable motd.timer
-```
-
-![Alt text](/image/motd.png?raw=true "OpenMandriva /etc/motd")
+![Alt text](/image/0-0-0pre1.png?raw=true "Ubuntu /etc/update-motd.d/")
