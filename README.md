@@ -1,5 +1,12 @@
-## Cool /etc/motd generator
+## About this fork 
+This fork will become a customized and more structurized approach to the original motd(-python)-script 
 
+## This is the goal to achieve (NOT ACTUAL OUTPUT FROM BRANCH (yet))
+![Alt text](/image/demo.png?raw=true "OpenMandriva /etc/motd")
+
+
+
+## Current version (synced fork)
 Copy script to bindir
 
 ```bash
