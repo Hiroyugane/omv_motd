@@ -4,7 +4,7 @@ import subprocess
 import re
 import socket
 import math
-import urllib.request
+from urllib import urlopen
 from glob import glob
 
 # Defines colors in a DICT for easier use
@@ -120,7 +120,7 @@ def run_cmd(cmd):
 # probably expand that to "IP-Addresses" with a list consisting of internal ip, public ip, ips of routers etc. maybe also ports
 # maybe build in api.ipify.org or similar as fallback
 def public_ip():
-    external_ip = urllib.request.urlopen('https://ident.me').read().decode('utf8')
+    external_ip = urlopen('https://ident.me').read().decode('utf8')
     return external_ip
 
 
