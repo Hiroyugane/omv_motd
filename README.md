@@ -1,5 +1,8 @@
 # Message of the python
 
+> Current version: 0.0.2 
+> (last update: 11.10.2019)
+
 ## About this fork
 
 This fork will become a customized and more structurized approach to the original motd(-python)-script by fedya, which got forked
@@ -15,4 +18,4 @@ This fork will become a customized and more structurized approach to the origina
 
 ## Current version (synced fork)
 
-![Alt text](/images/0-0-0pre1.png?raw=true "Ubuntu /etc/update-motd.d/")
+![Alt text](/images/0-0-2.PNG?raw=true "Ubuntu /etc/update-motd.d/")
