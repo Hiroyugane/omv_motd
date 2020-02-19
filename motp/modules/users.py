@@ -13,17 +13,16 @@ def logins_recent(days):
     loggedInList = run_cmd('/usr/bin/users | sort -u').split(' ')
     users_loggedInList = []
     users_loggedInList.append(loggedInList)
-
     # Lastlog prints rows of users with some info of them. Fetching and processing input to array:
-    recentLogins = run_cmd('lastlog -t %d' % 5).split('\n').pop(0)
+    recentLogins = run_cmd('lastlog -t %d' % 5).split('\n')
     # removes header
     recentLogins.pop(0)
-    # Loops through rows, cuts the columns and creates matrix
+    # Loops through rows, cuts the columns and creates matrix'
     for n in range(len(recentLogins)):
         users_recentLogins.append(recentLogins[n].split(None, 3))
+        users_recentLogins[n][3] = users_recentLogins[n][3].split()
     #Put matrix in documentation
-    return users_loggedInList
-
+    return users_loggedInList, users_recentLogins
 
 
 

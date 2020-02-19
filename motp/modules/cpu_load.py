@@ -2,6 +2,7 @@
 # Status: copied over existing code that will be reworked here.
 #         Hasn't been edited yet
 
+
 # CPU: scrape load avg and split
 raw_loadavg = run_cmd("cat /proc/loadavg").split()
 # CPU: convert load to float
