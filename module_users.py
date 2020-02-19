@@ -21,7 +21,7 @@ def logins_recent(days):
     # Loops through rows, cuts the columns and creates matrix
     for n in range(len(recentLogins)):
         users_recentLogins.append(recentLogins[n].split(None, 3))
-
+    #Put matrix in documentation
     return users_loggedInList
 
 
