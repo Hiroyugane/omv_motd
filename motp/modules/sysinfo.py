@@ -17,3 +17,6 @@ raw_uptime = run_cmd('uptime')
 uptime = raw_uptime.split(',')[0].split('up')[1].strip()
 #came from combining. put in actual variable-output
 rows.append(['Kernel', run_cmd('uname -or')])
+
+# time
+# other stuff you'd put in a crash report

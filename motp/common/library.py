@@ -8,6 +8,8 @@ import socket
 import urllib.request
 from glob import glob
 from configparser import ConfigParser
+import calendar
+import datetime
 
 # read config
 config = ConfigParser()
