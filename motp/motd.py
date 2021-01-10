@@ -2,9 +2,9 @@
 # Status:   copied over existing code and split up code to module.
 #           Will be the "central" piece that will put together info-gathering and formatting
 #           All content is raw leftovers from original fork. Will be reworked completely.
-import common
+import modules, baselib
 
-
+from baselib import *
 
 
 

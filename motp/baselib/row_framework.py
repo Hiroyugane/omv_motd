@@ -17,32 +17,6 @@ config.read('config.ini')
 colors = config._sections['colors']
 
 
-
-# colorize a string and reset color afterwards 
-def colored(col, s):
-    return colors[col] + s + colors['reset']
-
-# divide bytes by 1024 and change suffix to Datasize "1GB is easier than 1024MB etc"
-def humanise(byte_int):
-    for x in ['bytes', 'KiB', 'MiB', 'GiB', 'TiB']:
-        #if bigger than 1024, divide, go a size further, till under 1024
-        if byte_int < 1024.0:
-            #have a minimum of 3-digit-numbers incl. decimals
-            if byte_int < 10:
-                return "%1.2f%s" % (byte_int, x)
-            else:
-                return "%4.1f%s" % (byte_int, x)
-        byte_int /= 1024.0
-
-# smart length: check the length of the line as it'd be output
-def smartlen(line):
-    # replace tabs with 4 whitespaces
-    line = line.replace("\t", ' '*4)
-    #remove colorcodes
-    for color in colors.keys():
-        line = line.replace(colors[color], '')
-    return len(line)
-
 # Fluid Column-Layout code (doesnt make sense to put it here already since rows wouldn't be filled)
 # takes the rows of info (name,value) and amount of columns and puts out balanced rows in Row-array-result
 def column_display(rows, num_columns=2):
@@ -106,18 +80,3 @@ def center_by(width, uncentered):
         #put every line in results and prepend half of width minus highest length
         result += ' '*int((width-length)/2) + line + "\n"
     return result
-
-# is used to use commands easier. BASE DEF
-def run_cmd(cmd):
-    return subprocess.check_output(cmd, shell=True, stderr=subprocess.PIPE).decode('utf-8').strip()
-
-# this definition return true if the service requested is running
-# maybe add a function to search for services?
-# why cant it use use_cmd()?
-def service_active(service):
-    cmd = '/bin/systemctl is-active %s' % service
-    proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    proc.communicate()
-    if proc.returncode == 0:
-        return True
-    return False
