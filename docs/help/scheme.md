@@ -17,3 +17,7 @@ Main-functions: UPPERCASE_SNAKE_CASE
 
 "Loop"-indexer (+ ints for nested loops): n, m, l, o, p,
 other indexers: i, j, k,
+
+# Data Schemes
+
+Raw data values are always in a dict. the dict consists of the value itself with its value-name-key and the ruleset to be applied to the value when it's colored by its value, the threshold. It's called by the value-key with an appended "-rs". 

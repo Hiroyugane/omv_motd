@@ -67,6 +67,7 @@ def color_test():
     for color in COLORS:
         colortest_message = colored(color, color)
         colortest_result.append(print(colortest_message))
+        print(colortest_message)
     return colortest_result
 
 if __name__ == "__main__":
