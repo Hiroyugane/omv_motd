@@ -59,6 +59,7 @@ def color_test():
         colortest_message = colored(color, color + "\\n")
         colortest_result.append(print(colortest_message))
         colortest_result.append(run_cmd("printf {}").format(colortest_message))
+    print(colortest_result)
     return colortest_result
 
 if __name__ == "__main__":
