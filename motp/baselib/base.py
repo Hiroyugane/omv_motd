@@ -52,14 +52,25 @@ def smartlen(line):
 def run_cmd(cmd):
     return subprocess.check_output(cmd, shell=True, stderr=subprocess.PIPE).decode('utf-8').strip()
 
+COLORS = {
+    'bold': "\033[01m",
+    'black': "\033[30m",
+    'red': "\033[31m",
+    'green': "\033[32m",
+    'yellow': "\033[33m",
+    'blue': "\033[34m",
+    'purple': "\033[35m",
+    'cyan': "\033[36m",
+    'white': "\033[37m",
+    'reset': "\033[0m",
+    'system': "\033[38;5;120m"}
+
 # Functiontests
 def color_test():
     colortest_result = []
     for color in COLORS:
-        colortest_message = colored(color, color + "\\n")
+        colortest_message = colored(color, color)
         colortest_result.append(print(colortest_message))
-        colortest_result.append(run_cmd("printf {}").format(colortest_message))
-    print(colortest_result)
     return colortest_result
 
 if __name__ == "__main__":
