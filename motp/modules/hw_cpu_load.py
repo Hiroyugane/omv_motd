@@ -1,11 +1,23 @@
 #!/usr/bin/env python3
 # Status: copied over existing code that will be reworked here.
 #         Hasn't been edited yet
+#
+#
+#
+#
+#
+from ..baselib import *
 
 
-# CPU: scrape load avg and split
-raw_loadavg = run_cmd("cat /proc/loadavg").split()
-# CPU: convert load to float
-load = {'1min': float(raw_loadavg[0]),
-        '5min': float(raw_loadavg[1]),
-        '15min': float(raw_loadavg[2])}
+# scrape load avg, split and output as list
+def cpu_load():
+        loadAvg_raw = base.run_cmd("cat /proc/loadavg").split()
+        cpu_load = {
+                '1m': float(loadAvg_raw[0]),
+                '5m': float(loadAvg_raw[1]),
+                '15m': float(loadAvg_raw[2])
+        }
+        return cpu_load
+
+if __name__ == "__main__":
+        cpu_load()
