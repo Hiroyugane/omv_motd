@@ -14,12 +14,21 @@ import sys
 
 #import threshold_color
 
+
+##; Configwork
+
 # read config
 config = ConfigParser()
 config.read('../config/config_main.ini')
-COLORS = config._sections['colors']
+
+# format color dictionary
+COLORS_raw = config._sections['colors']
+COLORS = {}
+for color in COLORS_raw:
+    COLORS[color] = chr(0x1b) + COLORS_raw[color]
 
 
+##; Functions
 
 # colorize a string and reset color afterwards 
 def colored(col, s):
@@ -51,19 +60,6 @@ def smartlen(line):
 # is used to use commands easier. BASE DEF
 def run_cmd(cmd):
     return subprocess.check_output(cmd, shell=True, stderr=subprocess.PIPE).decode('utf-8').strip()
-
-COLORS = {
-    'bold': "\033[01m",
-    'black': "\033[30m",
-    'red': "\033[31m",
-    'green': "\033[32m",
-    'yellow': "\033[33m",
-    'blue': "\033[34m",
-    'purple': "\033[35m",
-    'cyan': "\033[36m",
-    'white': "\033[37m",
-    'reset': "\033[0m",
-    'system': "\033[38;5;120m"}
 
 # Functiontests
 def color_test():
