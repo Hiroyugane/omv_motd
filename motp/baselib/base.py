@@ -1,3 +1,5 @@
+# Base Module which is being used in every other python module
+# Status: being reworked
 import math
 import subprocess
 import os
@@ -10,22 +12,18 @@ import calendar
 import datetime
 import sys
 
-from baselib import threshold_color
+#import threshold_color
 
 # read config
 config = ConfigParser()
 config.read('../config/config_main.ini')
-colors = config._sections['colors']
-
-
-
-
+COLORS = config._sections['colors']
 
 
 
 # colorize a string and reset color afterwards 
 def colored(col, s):
-    return colors[col] + s + colors['reset']
+    return COLORS[col] + s + COLORS['reset']
 
 
 # divide bytes by 1024 and change suffix to Datasize "1GB is easier than 1024MB etc"
@@ -46,10 +44,22 @@ def smartlen(line):
     # replace tabs with 4 whitespaces
     line = line.replace("\t", ' '*4)
     #remove colorcodes
-    for color in colors.keys():
-        line = line.replace(colors[color], '')
+    for color in COLORS.keys():
+        line = line.replace(COLORS[color], '')
     return len(line)
 
 # is used to use commands easier. BASE DEF
 def run_cmd(cmd):
     return subprocess.check_output(cmd, shell=True, stderr=subprocess.PIPE).decode('utf-8').strip()
+
+# Functiontests
+def color_test():
+    colortest_result = []
+    for color in COLORS:
+        colortest_message = colored(color, color + "\\n")
+        colortest_result.append(print(colortest_message))
+        colortest_result.append(run_cmd("printf {}").format(colortest_message))
+    return colortest_result
+
+if __name__ == "__main__":
+    color_test()
