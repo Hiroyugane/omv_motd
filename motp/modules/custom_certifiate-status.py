@@ -6,7 +6,6 @@ from pathlib import Path
 print('Running' if __name__ == '__main__' else 'Importing', Path(__file__).resolve())
 #
 
-
 #mandriva-based nginx-docker used. Completely left out for now since standard system wont have webservers
 r''' (raw-string for preventing pylint-warnings)
 #find certificates and their status

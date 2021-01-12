@@ -1,10 +1,18 @@
 #!/usr/bin/env python3
-# Status: Reworked, not tested
+# Status: Reworked, functional
+# 
+# 
+# Input: -
 #         
 # Output: 
-#
-#
-#
+# {
+#       '1m': 0.52, 
+#       '5m': 0.58, 
+#       '15m': 0.59, 
+#       '1m-rs': 'cpu_load', 
+#       '5m-rs': 'cpu_load', 
+#       '15m-rs': 'cpu_load'
+# }
 #
 # Debug Info
 from pathlib import Path
@@ -24,7 +32,8 @@ def cpu_load():
                 '5m-rs': "cpu_load",
                 '15m-rs': "cpu_load"
         }
-        print(cpu_load)
+        if __name__ == "__main__":
+                print(cpu_load)
         return cpu_load
 
 if __name__ == "__main__":

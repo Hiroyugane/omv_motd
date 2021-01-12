@@ -8,10 +8,10 @@ from pathlib import Path
 print('Running' if __name__ == '__main__' else 'Importing', Path(__file__).resolve())
 #
 from .modules import hw_cpu_load
-from .baselib import base
+from .baselib import *
 
 hw_cpu_load.cpu_load()
-
+#print(baselib.base.colored("red", "hello"))
 
 
 # # ALL combine (replace with calling of functions) // 1. gathering, 2. formatting
