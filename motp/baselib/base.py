@@ -1,5 +1,9 @@
 # Base Module which is being used in every other python module
 # Status: being reworked
+# Debug Info
+from pathlib import Path
+print('Running' if __name__ == '__main__' else 'Importing', Path(__file__).resolve())
+#
 import math
 import subprocess
 import os
@@ -19,7 +23,8 @@ import sys
 
 # read config
 config = ConfigParser()
-config.read('../config/config_main.ini')
+config.read(os.path.join(os.path.dirname(__file__), '..', 'config', 'config_main.ini'))
+
 
 # format color dictionary
 COLORS_raw = config._sections['colors']

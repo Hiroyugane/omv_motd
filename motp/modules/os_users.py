@@ -2,6 +2,10 @@
 # Status:   copied over existing code that will be reworked here.
 #           Rework is being worked on; Will be example-module when finished.
 #           Open for suggestions
+# Debug Info
+from pathlib import Path
+print('Running' if __name__ == '__main__' else 'Importing', Path(__file__).resolve())
+#
 from ..common.library import run_cmd
 from ..common import library
 import datetime

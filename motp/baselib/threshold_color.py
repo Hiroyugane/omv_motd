@@ -1,5 +1,9 @@
 # Status: copied over existing code that will be reworked here.
 #         Hasn't been edited yet
+# Debug Info
+from pathlib import Path
+print('Running' if __name__ == '__main__' else 'Importing', Path(__file__).resolve())
+#
 
 # ALL COMBINE: colorize for normal values
 # all values in motd should be in colorized-section, with if-clause if config for that is present, if not -> default color

@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # Status: copied over existing code that will be reworked here.
 #         Hasn't been edited yet
+# Debug Info
+from pathlib import Path
+print('Running' if __name__ == '__main__' else 'Importing', Path(__file__).resolve())
+#
 
 #part for docker-container-info
 def docker_status():

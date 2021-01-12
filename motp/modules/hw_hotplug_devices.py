@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # Status: copied over existing code that will be reworked here.
 #         Hasn't been edited yet
+# Debug Info
+from pathlib import Path
+print('Running' if __name__ == '__main__' else 'Importing', Path(__file__).resolve())
+#
 
 # What's this? doesnt work when testing, maybe also mandriva-special? if found what its for, add here
 #

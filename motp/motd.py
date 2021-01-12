@@ -1,11 +1,16 @@
+
 #!/usr/bin/env python3
 # Status:   copied over existing code and split up code to module.
 #           Will be the "central" piece that will put together info-gathering and formatting
 #           All content is raw leftovers from original fork. Will be reworked completely.
-from .modules import *
-from .baselib import *
+# Debug Info
+from pathlib import Path
+print('Running' if __name__ == '__main__' else 'Importing', Path(__file__).resolve())
+#
+from .modules import hw_cpu_load
+from .baselib import base
 
-
+hw_cpu_load.cpu_load()
 
 
 
