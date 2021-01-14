@@ -2,8 +2,8 @@
 
 ## About this fork
 
-This fork will become a customized and more structurized approach to the original motd(-python)-script by fedya, which got forked
-(this rep got deleted and reforked a couple times the past days. It's been due to complications with being a beginner with github and privacy-stuff)
+This fork will become a customized and more structurized approach to the original motd(-python)-script by fedya, which got forked.
+Once it will be an actual (beta)-release, anyone should be able to use it on debian-based systems and it should be possible to write own extensions or modules for the data *you* want to see 
 
 ## Roadmap-preview
 

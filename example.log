@@ -1,0 +1,9 @@
+DEBUG:root:calling loadavg
+CRITICAL:root:/proc/loadavg not found, are you using a supported OS?
+INFO:root:ImportingC:\Users\Hiro\Desktop\Message-of-the-Python\motp\modules\hw_cpu.py
+INFO:root:ImportingC:\Users\Hiro\Desktop\Message-of-the-Python\motp\modules\module_template.py
+DEBUG:root:calling loadavg
+CRITICAL:root:/proc/loadavg not found, are you using a supported OS?
+INFO:root:Importing/mnt/c/Users/Hiro/Desktop/Message-of-the-Python/motp/modules/hw_cpu.py
+INFO:root:Importing/mnt/c/Users/Hiro/Desktop/Message-of-the-Python/motp/modules/module_template.py
+DEBUG:root:calling loadavg

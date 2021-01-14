@@ -7,7 +7,8 @@
 from pathlib import Path
 print('Running' if __name__ == '__main__' else 'Importing', Path(__file__).resolve())
 #
-
+import logging
+logging.basicConfig(filename='example.log', level=logging.DEBUG)
 
 from os.path import dirname, basename, isfile, join
 import glob         # for dynamic module import
@@ -19,12 +20,12 @@ from motp.baselib import base#, row_framework, threshold_color
 
 
 # dynamically read existing .py-Files in modules/ and import them
-allModules = glob.glob(join(dirname(__file__), "modules", "*load.py"))
+allModules = glob.glob(join(dirname(__file__), "modules", "*.py"))
 motd_modulesList = [ basename(f)[:-3] for f in allModules if isfile(f) and not f.endswith('__init__.py')]
 for moduleItem in motd_modulesList:
     importlib.import_module('motp.modules.'+moduleItem)
 
-print(motp.baselib.base.colored("bred", str(motp.modules.hw_cpu_load.cpu_load())))
+print(motp.baselib.base.colored("bred", str(motp.modules.hw_cpu.loadavg())))
 
 
 # # ALL combine (replace with calling of functions) // 1. gathering, 2. formatting
@@ -49,12 +50,7 @@ print(motp.baselib.base.colored("bred", str(motp.modules.hw_cpu_load.cpu_load())
 # #make hdd temp optional, too. VMs dont have SMART
 # if service_active('fail2ban.service'):
 #     rows.append(['fail2ban', str(fail2ban_status()['status']) + str(fail2ban_status()['total']) +  str(fail2ban_status()['current'])])
-# if service_active('docker.service'):
-#     rows.append(['Docker', str(docker_status()['status']) + str(docker_status()['running']) + str(docker_status()['wipe']) + str(docker_status()['version'])])
-# # from originator(and below) -> fix me
-# #rows.append(['Certificate valid', str(certificate_status()['cert_expiration'])])
-# #rows.append(['HDD status', str(show_hdd_temp()['temp']) + str(show_hdd_temp()['disk'])])
-# return(rows)
+# if service_active('docker.
 
 
 # # whatevever the originator wanted to say with that below, maybe the order of things?
