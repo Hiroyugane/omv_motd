@@ -2,3 +2,4 @@ log.log
 configtest.ini
 testing_prepare-environment.py
 __pycache__
+*.log

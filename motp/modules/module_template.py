@@ -18,7 +18,7 @@ import warnings
 import logging
 from pathlib import Path
 from ..baselib import base
-logging.info('Running' if __name__ == '__main__' else 'Importing' + str(Path(__file__).resolve()))
+logging.debug('Running '+str(Path(__file__).resolve()) if __name__ == '__main__' else 'Importing '+str(Path(__file__).resolve()))
 ######################################################
 # Imports
 ######################################################
@@ -54,3 +54,5 @@ def main():
 ######################################################
 if __name__ == "__main__":
         main()
+
+logging.info('Finished Running '+str(Path(__file__).resolve()) if __name__ == '__main__' else 'Finished Importing '+str(Path(__file__).resolve()))
