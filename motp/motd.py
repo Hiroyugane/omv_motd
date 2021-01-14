@@ -12,19 +12,19 @@ print('Running' if __name__ == '__main__' else 'Importing', Path(__file__).resol
 from os.path import dirname, basename, isfile, join
 import glob         # for dynamic module import
 import importlib    # for dynamic module import
-
+import motp.modules
+from motp.baselib import base#, row_framework, threshold_color
 
 # dynamically read existing .py-Files in modules/ and import them
-lmodules = glob.glob(join(dirname(__file__), "modules\\*load.py"))
-motd_modulesList = [ basename(f)[:-3] for f in lmodules if isfile(f) and not f.endswith('__init__.py')]
+allModules = glob.glob(join(dirname(__file__), "modules\\*load.py"))
+motd_modulesList = [ basename(f)[:-3] for f in allModules if isfile(f) and not f.endswith('__init__.py')]
 for moduleItem in motd_modulesList:
     print(moduleItem)
-    importlib.import_module('.'+moduleItem, 'motp.modules')
+    importlib.import_module('motp.modules.'+moduleItem)
 
 
 #from .baselib import base, row_framework, threshold_color
 
-print()
 #print(baselib.base.colored("red", "hello"))
 
 
