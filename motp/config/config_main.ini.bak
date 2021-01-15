@@ -1,0 +1,111 @@
+[general]
+# when set to true, the locally configured timezone will be used
+# when set to false, all times will be displayed in UTC
+usetimezone = true
+
+[layout]
+
+[design]
+
+[colors]
+# Dictionary for colorizing the output
+# Doesn't have to be changed usually (only for fun or later use)
+#
+# Default:
+# bold = [01m
+# reset = [0m
+# 
+# black = [30m
+# red = [31m
+# green = [32m
+# yellow = [33m
+# blue = [34m
+# purple = [35m
+# cyan = [36m
+# white = [37m
+# system = [38;5;120m
+# 
+# bgblack = [40m
+# bgred = [41m
+# bggreen = [42m
+# bgyellow = [43m
+# bgblue = [44m
+# bgpurple = [45m
+# bgcyan = [46m
+# bgwhite = [47m
+# bgsystem = [48;5;120m
+# 
+# bblack = [90m
+# bred = [91m
+# bgreen = [92m
+# byellow = [93m
+# bblue = [94m
+# bpurple = [95m
+# bcyan = [96m
+# bwhite = [97m
+# bsystem = [98m
+# 
+# bgbblack = [100m
+# bgbred = [101m
+# bgbgreen = [102m
+# bgbyellow = [103m
+# bgbblue = [104m
+# bgbpurple = [105m
+# bgbcyan = [106m
+# bgbwhite = [107m
+# bgbsystem = [108;5;120m
+
+bold = [01m
+reset = [0m
+
+black = [30m
+red = [31m
+green = [32m
+yellow = [33m
+blue = [34m
+purple = [35m
+cyan = [36m
+white = [37m
+system = [38;5;120m
+
+bgblack = [40m
+bgred = [41m
+bggreen = [42m
+bgyellow = [43m
+bgblue = [44m
+bgpurple = [45m
+bgcyan = [46m
+bgwhite = [47m
+bgsystem = [48;5;120m
+
+bblack = [90m
+bred = [91m
+bgreen = [92m
+byellow = [93m
+bblue = [94m
+bpurple = [95m
+bcyan = [96m
+bwhite = [97m
+bsystem = [98m
+
+bgbblack = [100m
+bgbred = [101m
+bgbgreen = [102m
+bgbyellow = [103m
+bgbblue = [104m
+bgbpurple = [105m
+bgbcyan = [106m
+bgbwhite = [107m
+bgbsystem = [108;5;120m
+
+[colorizing]
+
+[modules]
+
+[module_users]
+# Tolerance of timestamp-check of user. 
+# Set lower if many users are using the system simultaneously
+# Set higher if module can't find the user (cause: processing too slow)
+# Unit: milliseconds
+# Default: 150
+timestamptolerance = 150
