@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Status: Reworked, functional
+# Status: New, not tested yet, not published
 ######################################################
 # Info-Documentation
 ######################################################
@@ -28,10 +28,6 @@ def whosparent():
 ######################################################
 # Imports
 ######################################################
-# global imports here
-
-####################
-# local imports here
 
 ######################################################
 # In-File Config
@@ -39,7 +35,7 @@ def whosparent():
 function_fallbackReturn = {
 }
 ######################################################
-# Code, Functions
+# Functions, Methods (Code)
 ######################################################
 # description of function
 def templatefunction():
