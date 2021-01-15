@@ -14,11 +14,17 @@
 ######################################################
 # Foundation, do not change
 ######################################################
-import warnings
 import logging
 from pathlib import Path
+import inspect
+
 from ..baselib import base
+
 logging.debug('Running '+str(Path(__file__).resolve()) if __name__ == '__main__' else 'Importing '+str(Path(__file__).resolve()))
+def whoami():
+    return inspect.stack()[1][3]
+def whosparent():
+    return inspect.stack()[2][3]
 ######################################################
 # Imports
 ######################################################
@@ -37,22 +43,28 @@ function_fallbackReturn = {
 ######################################################
 # description of function
 def templatefunction():
-        try:
-            #some stuff
-            logging.critical("templatefunction finished successful")
-            return 
-        except: 
-            logging.critical("Critical Error message")
-            return
+	logging.debug("Executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+	try:
+		#some stuff
+		print()
+	except: 
+		logging.critical("Critical Error message")
+		return
+	else:
+		logging.debug("Finishing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+		return
 ######################################################
 # Main
 ######################################################
 def main():
-        print("this is a template, if it is main, it will print out the output of all functions for testing purposes")
+	logging.debug("Executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+	print("this is a template, if it is main, it will print out the output of all functions for testing purposes")
+	logging.debug("Finishing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
 ######################################################
 # Default clause
 ######################################################
 if __name__ == "__main__":
-        main()
+	main()
 
 logging.info('Finished Running '+str(Path(__file__).resolve()) if __name__ == '__main__' else 'Finished Importing '+str(Path(__file__).resolve()))
+#EOF

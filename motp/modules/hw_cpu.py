@@ -20,13 +20,17 @@
 ######################################################
 # Foundation, do not change
 ######################################################
-import warnings
 import logging
 from pathlib import Path
+import inspect
 
 from ..baselib import base
 
 logging.debug('Running '+str(Path(__file__).resolve()) if __name__ == '__main__' else 'Importing '+str(Path(__file__).resolve()))
+def whoami():
+    return inspect.stack()[1][3]
+def whosparent():
+    return inspect.stack()[2][3]
 ######################################################
 # Imports
 ######################################################
@@ -48,11 +52,10 @@ loadAvg_fallbackReturn = {
 ######################################################
 # scrape load avg, split and output as dict
 def loadavg():
-    logging.debug("calling loadavg")
+    logging.debug("Executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
     try:
         loadAvg_raw = base.run_cmd("cat /proc/loadavg").split() 
     except Exception: 
-        warnings.warn("/proc/loadavg not found, are you using a supported OS?")
         logging.critical("/proc/loadavg not found, are you using a supported OS?")
         return loadAvg_fallbackReturn
     else:
@@ -64,13 +67,15 @@ def loadavg():
             '5m-rs': "cpu_load",
             '15m-rs': "cpu_load"
         }
+        logging.debug("Finishing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
         return cpu_load
 ######################################################
 # Main
 ######################################################
 def main():
-    print(dir(__file__))
+    logging.debug("Executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
     print(loadavg())
+    logging.debug("Finishing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
 ######################################################
 # Default clause
 ######################################################
@@ -78,3 +83,4 @@ if __name__ == "__main__":
     main()
 
 logging.info('Finished Running '+str(Path(__file__).resolve()) if __name__ == '__main__' else 'Finished Importing '+str(Path(__file__).resolve()))
+#EOF
