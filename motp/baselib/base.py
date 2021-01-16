@@ -129,39 +129,46 @@ def humanise_bit(int_:int):
         logging.debug("Finishing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
         return int_return
 
+# smart length: check the length of the line as it'd be output
+def smartlen(line:str):
+    logging.debug("Executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+    try:
+        line = line.replace("\t", ' '*4)
+        for color in colors.keys():
+            line = line.replace(colors[color], '')
+    except Exception: 
+        logging.critical("Error executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+        return
+    else:
+        logging.debug("Finishing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+        return len(line)
 
+# make commands run as if they're ran on terminal
+def run_cmd(cmd):
+    logging.debug("Executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+    try:
+        cmd_output = subprocess.check_output(cmd, shell=True, stderr=subprocess.PIPE).decode('utf-8').strip()
+    except Exception: 
+        logging.critical("Error executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+        return
+    else:
+        logging.debug("Finishing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+        return cmd_output
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Function Test
+def color_test():
+    logging.debug("Executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+    colortest_result = []
+    try:
+        for color in colors:
+            colortest_message = colored(color, color)
+            colortest_result.append(print(colortest_message))
+    except Exception: 
+        logging.critical("Error executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+        return "Error"
+    else:
+        logging.debug("Finishing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+        return colortest_result
 
 # description of function
 def templatefunction():
@@ -169,9 +176,9 @@ def templatefunction():
     try:
         #some stuff
         print()
-    except: 
-        logging.critical("Critical Error message")
-        return
+    except Exception: 
+        logging.critical("Error executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+        return "Error"
     else:
         logging.debug("Finishing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
         return
@@ -180,7 +187,7 @@ def templatefunction():
 ######################################################
 def main():
     logging.debug("Executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
-    print("this is a template, if it is main, it will print out the output of all functions for testing purposes")
+    color_test()
     logging.debug("Finishing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
 ######################################################
 # Default clause
@@ -224,41 +231,6 @@ logging.debug('Finished Running '+str(Path(__file__).resolve()) if __name__ == '
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# smart length: check the length of the line as it'd be output
-def smartlen(line):
-    # replace tabs with 4 whitespaces
-    line = line.replace("\t", ' '*4)
-    #remove colorcodes
-    for color in colors.keys():
-        line = line.replace(colors[color], '')
-    return len(line)
-
-# is used to use commands easier. BASE DEF
-def run_cmd(cmd):
-    return subprocess.check_output(cmd, shell=True, stderr=subprocess.PIPE).decode('utf-8').strip()
-
-# Functiontests
-def color_test():
-    colortest_result = []
-    for color in colors:
-        colortest_message = colored(color, color)
-        colortest_result.append(print(colortest_message))
-    return colortest_result
 
 if __name__ == "__main__":
     color_test()

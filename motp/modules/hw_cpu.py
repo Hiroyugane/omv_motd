@@ -55,7 +55,7 @@ def loadavg():
     logging.debug("Executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
     try:
         loadAvg_raw = base.run_cmd("cat /proc/loadavg").split() 
-    except Exception: 
+    except Exception:
         logging.critical("/proc/loadavg not found, are you using a supported OS?")
         return loadAvg_fallbackReturn
     else:
