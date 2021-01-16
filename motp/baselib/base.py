@@ -12,19 +12,7 @@
 #
 # To-Do, Ideas:
 #      
-######################################################
-# Foundation, do not change
-######################################################
-import logging
-from pathlib import Path
-import inspect
-from ..baselib import base
 
-logging.debug('Running '+str(Path(__file__).resolve()) if __name__ == '__main__' else 'Importing '+str(Path(__file__).resolve()))
-def whoami():
-    return inspect.stack()[1][3]
-def whosparent():
-    return inspect.stack()[2][3]
 ######################################################
 # Imports
 ######################################################
@@ -40,6 +28,34 @@ import calendar
 import datetime
 import sys
 import shutil
+######################################################
+# Foundation, do not change
+######################################################
+import logging
+from pathlib import Path
+import inspect
+######################################################
+# logwork-functions
+######################################################
+def whoami():
+    try:
+        whoami_result = inspect.stack()[2][3]
+        return whoami_result
+    except:
+        return "whoami not found"
+def whosparent():
+    try:
+        whosparent_result = inspect.stack()[3][3]
+        return whosparent_result
+    except:
+        return "whosparent not found"
+
+def log_start():
+    return logging.debug(('Running ' if __name__ == '__main__' else 'Importing/using ')+str(Path(__file__).resolve())+str(": {} ({})".format(whoami(), whosparent())))
+def log_end(): 
+    return logging.debug(('Finished Running ' if __name__ == '__main__' else 'Finished Importing/using ')+str(Path(__file__).resolve())+str(": {} ({})".format(whoami(), whosparent())))
+
+log_start
 ######################################################
 # In-File Config, prework
 ######################################################
@@ -67,19 +83,19 @@ for color in colors_raw:
 ######################################################
 # run commands as if they'd be used shell
 def colored(col:str, s:str):
-    logging.debug("Executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+    log_start()
     try:
         colored_result = colors[col] + s + colors['reset']
     except: 
         logging.critical("Critical Error message")
         return
     else:
-        logging.debug("Finishing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+        log_end()
         return colored_result
 
 # takes int of bytes and puts them into the right unit (/1024). Keeps values mostly to 3 digits
 def humanise_byte(int_:int):
-    logging.debug("Executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+    log_start()
     try:
         for x in ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']:
             if int_ < 1024.0:
@@ -100,12 +116,12 @@ def humanise_byte(int_:int):
         logging.critical("Critical Error with humanising: "+int_)
         return
     else:
-        logging.debug("Finishing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+        log_end()
         return int_return
 
 # takes int of bits and puts them into the right unit (/1000). Keeps values mostly to 3 digits
 def humanise_bit(int_:int):
-    logging.debug("Executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+    log_start()
     try:
         for x in ['bit', 'Kbit', 'Mbit', 'Gbit', 'Tbit', 'Pbit', 'Ebit', 'Zbit', 'Ybit']:
             if int_ < 1000.0:
@@ -126,12 +142,12 @@ def humanise_bit(int_:int):
         logging.critical("Critical Error with humanising: "+int_)
         return
     else:
-        logging.debug("Finishing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+        log_end()
         return int_return
 
 # smart length: check the length of the line as it'd be output
 def smartlen(line:str):
-    logging.debug("Executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+    log_start()
     try:
         line = line.replace("\t", ' '*4)
         for color in colors.keys():
@@ -140,24 +156,24 @@ def smartlen(line:str):
         logging.critical("Error executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
         return
     else:
-        logging.debug("Finishing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+        log_end()
         return len(line)
 
 # make commands run as if they're ran on terminal
 def run_cmd(cmd):
-    logging.debug("Executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+    log_start()
     try:
         cmd_output = subprocess.check_output(cmd, shell=True, stderr=subprocess.PIPE).decode('utf-8').strip()
     except Exception: 
         logging.critical("Error executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
         return
     else:
-        logging.debug("Finishing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+        log_end()
         return cmd_output
 
 # Function Test
 def color_test():
-    logging.debug("Executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+    log_start()
     colortest_result = []
     try:
         for color in colors:
@@ -167,22 +183,22 @@ def color_test():
         logging.critical("Error executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
         return "Error"
     else:
-        logging.debug("Finishing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
         for colormessage in colortest_result:
             print(colormessage)
+        log_end()
         return 
 
 # description of function
 def templatefunction():
-    logging.debug("Executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+    log_start()
     try:
         #some stuff
-        print()
+        ""
     except Exception: 
         logging.critical("Error executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
         return "Error"
     else:
-        logging.debug("Finishing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+        log_end()
         return
 ######################################################
 # Main
@@ -196,8 +212,7 @@ def main():
 ######################################################
 if __name__ == "__main__":
     main()
-
-logging.debug('Finished Running '+str(Path(__file__).resolve()) if __name__ == '__main__' else 'Finished Importing '+str(Path(__file__).resolve()))
+log_end()
 #EOF
 
 
