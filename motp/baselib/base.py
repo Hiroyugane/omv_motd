@@ -51,13 +51,30 @@ def whosparent():
         return "whosparent not found"
 
 def log_start():
-    return logging.debug(('Running ' if __name__ == '__main__' else 'Importing/using ')+str(Path(__file__).resolve())+str(": {} ({})".format(whoami(), whosparent())))
+    return logging.debug((
+        'Running ' if __name__ == '__main__' 
+        else 'Importing/using '
+        )
+        +str(Path(__file__).resolve())
+        +str(": {} ({})".format(whoami(), whosparent()))
+        )
 def log_end(): 
-    return logging.debug(('Finished Running ' if __name__ == '__main__' else 'Finished Importing/using ')+str(Path(__file__).resolve())+str(": {} ({})".format(whoami(), whosparent())))
+    return logging.debug((
+        'Finished Running ' if __name__ == '__main__' 
+        else 'Finished Importing/using '
+        )
+        +str(Path(__file__).resolve())
+        +str(": {} ({})".format(whoami(), whosparent()))
+        )
 def log_exception(): 
-    return logging.critical(('Exception while Running ' if __name__ == '__main__' else 'Exception while Importing/using ')+str(Path(__file__).resolve())+str(": {} ({})".format(whoami(), whosparent())))
+    return logging.critical((
+        'Exception while Running ' if __name__ == '__main__' 
+        else 'Exception while Importing/using '
+        )
+        +str(Path(__file__).resolve())
+        +str(": {} ({})".format(whoami(), whosparent())))
 
-log_start
+log_start()
 ######################################################
 # In-File Config, prework
 ######################################################
@@ -65,14 +82,27 @@ log_start
 config = ConfigParser()
 configpath = os.path.join(os.path.dirname(__file__), '..', 'config')
 try:
-    config.read(os.path.join(os.path.dirname(__file__), '..', 'config', 'config_main.ini'))
+    config.read(os.path.join(
+        os.path.dirname(__file__), 
+        '..', 
+        'config', 
+        'config_main.ini'
+        ))
 except Exception:
     try:
-        shutil.copyfile(os.path.join(configpath, 'config_main.ini.back'), os.path.join(configpath, 'config_main.ini'))
+        shutil.copyfile(
+            os.path.join(configpath, 'config_main.ini.back'), 
+            os.path.join(configpath, 'config_main.ini')
+            )
     except Exception:
-        logging.critical("config_main.ini not found and backup couldn't be restored, aborting")
+        logging.critical(
+            "config_main.ini not found, backup couldn't be restored, aborting"
+            )
     else:
-        logging.warn("copied config_main.ini.bak to config_main.ini because python couldn't find a valid config")
+        logging.warn(
+            """copied config_main.ini.bak to config_main.ini 
+            because python couldn't find a valid config"""
+            )
 else:
     logging.debug("read config_main.ini successfully")
 # format color dictionary
@@ -95,11 +125,16 @@ def colored(col:str, s:str):
         log_end()
         return colored_result
 
-# takes int of bytes and puts them into the right unit (/1024). Keeps values mostly to 3 digits
+# takes int of bytes and puts them into the right unit (/1024). 
+# Keeps returns mostly to 3 digits (excl. dot).
 def humanise_byte(int_:int):
     log_start()
     try:
-        for x in ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']:
+        for x in [
+            'B', 'KiB', 'MiB', 
+            'GiB', 'TiB', 'PiB', 
+            'EiB', 'ZiB', 'YiB'
+            ]:
             if int_ < 1024.0:
                 if int_ < 1:
                     int_return = "%1.3f %s" % (int_, x)
@@ -121,11 +156,16 @@ def humanise_byte(int_:int):
         log_end()
         return int_return
 
-# takes int of bits and puts them into the right unit (/1000). Keeps values mostly to 3 digits
+# takes int of bits and puts them into the right unit (/1000). 
+# returns are mostly 3 digit (excluding dot).
 def humanise_bit(int_:int):
     log_start()
     try:
-        for x in ['bit', 'Kbit', 'Mbit', 'Gbit', 'Tbit', 'Pbit', 'Ebit', 'Zbit', 'Ybit']:
+        for x in [
+            'bit', 'Kbit', 'Mbit', 
+            'Gbit', 'Tbit', 'Pbit', 
+            'Ebit', 'Zbit', 'Ybit'
+            ]:
             if int_ < 1000.0:
                 if int_ < 1:
                     int_return = "%1.3f %s" % (int_, x)
@@ -155,7 +195,7 @@ def smartlen(line:str):
         for color in colors.keys():
             line = line.replace(colors[color], '')
     except Exception: 
-        logging.critical("Error executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+        log_exception()
         return
     else:
         log_end()
@@ -165,9 +205,11 @@ def smartlen(line:str):
 def run_cmd(cmd):
     log_start()
     try:
-        cmd_output = subprocess.check_output(cmd, shell=True, stderr=subprocess.PIPE).decode('utf-8').strip()
+        cmd_output = subprocess.check_output(
+            cmd, shell=True, stderr=subprocess.PIPE
+            ).decode('utf-8').strip()
     except Exception: 
-        logging.critical("Error executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+        log_exception()
         return
     else:
         log_end()
@@ -182,7 +224,7 @@ def color_test():
             colortest_message = colored(color, color)
             colortest_result.append(colortest_message)
     except Exception: 
-        logging.critical("Error executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+        log_exception()
         return "Error"
     else:
         for colormessage in colortest_result:
@@ -197,7 +239,7 @@ def templatefunction():
         #some stuff
         ""
     except Exception: 
-        logging.critical("Error executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+        log_exception()
         return "Error"
     else:
         log_end()
@@ -206,9 +248,9 @@ def templatefunction():
 # Main
 ######################################################
 def main():
-    logging.debug("Executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+    log_start()
     color_test()
-    logging.debug("Finishing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+    log_end()
 ######################################################
 # Default clause
 ######################################################

@@ -48,7 +48,13 @@ def templatefunction():
 ######################################################
 def main():
     base.log_start()
-    print("this is a template, if it is main, it will print out the output of all functions for testing purposes")
+    print("""
+        this is a template, 
+        if it is main, 
+        it will print out the output of all functions - for testing purposes
+        try to not get above 80 characters per line, please.
+        For more info, read PEP0008
+        """)
     base.log_end()
 ######################################################
 # Default clause

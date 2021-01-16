@@ -50,7 +50,8 @@ def loadavg():
     try:
         loadAvg_raw = base.run_cmd("cat /proc/loadavg").split() 
     except Exception:
-        logging.critical("/proc/loadavg not found, are you using a supported OS?")
+        logging.critical(
+            "/proc/loadavg not found, are you using a supported OS?")
         return loadAvg_fallbackReturn
     else:
         cpu_load = {
