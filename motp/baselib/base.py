@@ -162,13 +162,15 @@ def color_test():
     try:
         for color in colors:
             colortest_message = colored(color, color)
-            colortest_result.append(print(colortest_message))
+            colortest_result.append(colortest_message)
     except Exception: 
         logging.critical("Error executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
         return "Error"
     else:
         logging.debug("Finishing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
-        return colortest_result
+        for colormessage in colortest_result:
+            print(colormessage)
+        return 
 
 # description of function
 def templatefunction():
