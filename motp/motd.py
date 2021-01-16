@@ -55,7 +55,7 @@ if __name__ == "__main__":
         main()
 
 logging.debug('Finished Running '+str(Path(__file__).resolve()) if __name__ == '__main__' else 'Importing '+str(Path(__file__).resolve()))
-
+logging.info("finished program")
 
 
 

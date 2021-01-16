@@ -54,6 +54,8 @@ def log_start():
     return logging.debug(('Running ' if __name__ == '__main__' else 'Importing/using ')+str(Path(__file__).resolve())+str(": {} ({})".format(whoami(), whosparent())))
 def log_end(): 
     return logging.debug(('Finished Running ' if __name__ == '__main__' else 'Finished Importing/using ')+str(Path(__file__).resolve())+str(": {} ({})".format(whoami(), whosparent())))
+def log_exception(): 
+    return logging.critical(('Exception while Running ' if __name__ == '__main__' else 'Exception while Importing/using ')+str(Path(__file__).resolve())+str(": {} ({})".format(whoami(), whosparent())))
 
 log_start
 ######################################################

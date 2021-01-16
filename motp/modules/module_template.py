@@ -15,16 +15,10 @@
 # Foundation, do not change
 ######################################################
 import logging
-from pathlib import Path
-import inspect
 
 from ..baselib import base
 
-logging.debug('Running '+str(Path(__file__).resolve()) if __name__ == '__main__' else 'Importing '+str(Path(__file__).resolve()))
-def whoami():
-    return inspect.stack()[1][3]
-def whosparent():
-    return inspect.stack()[2][3]
+base.log_start
 ######################################################
 # Imports
 ######################################################
@@ -39,28 +33,28 @@ function_fallbackReturn = {
 ######################################################
 # description of function
 def templatefunction():
-    logging.debug("Executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+    base.log_start()
     try:
         #some stuff
         print()
     except Exception:  
-        logging.critical("Error executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+        base.log_exception()
         return "Error"
     else:
-        logging.debug("Finishing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+        base.log_end()
         return
 ######################################################
 # Main
 ######################################################
 def main():
-    logging.debug("Executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+    base.log_start()
     print("this is a template, if it is main, it will print out the output of all functions for testing purposes")
-    logging.debug("Finishing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+    base.log_end()
 ######################################################
 # Default clause
 ######################################################
 if __name__ == "__main__":
     main()
 
-logging.debug('Finished Running '+str(Path(__file__).resolve()) if __name__ == '__main__' else 'Finished Importing '+str(Path(__file__).resolve()))
+base.log_end()
 #EOF

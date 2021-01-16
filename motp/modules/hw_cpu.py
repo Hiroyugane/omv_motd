@@ -21,16 +21,10 @@
 # Foundation, do not change
 ######################################################
 import logging
-from pathlib import Path
-import inspect
 
 from ..baselib import base
 
-logging.debug('Running '+str(Path(__file__).resolve()) if __name__ == '__main__' else 'Importing '+str(Path(__file__).resolve()))
-def whoami():
-    return inspect.stack()[1][3]
-def whosparent():
-    return inspect.stack()[2][3]
+base.log_start()
 ######################################################
 # Imports
 ######################################################
@@ -52,7 +46,7 @@ loadAvg_fallbackReturn = {
 ######################################################
 # scrape load avg, split and output as dict
 def loadavg():
-    logging.debug("Executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+    base.log_start()
     try:
         loadAvg_raw = base.run_cmd("cat /proc/loadavg").split() 
     except Exception:
@@ -67,20 +61,20 @@ def loadavg():
             '5m-rs': "cpu_load",
             '15m-rs': "cpu_load"
         }
-        logging.debug("Finishing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+        base.log_end()
         return cpu_load
 ######################################################
 # Main
 ######################################################
 def main():
-    logging.debug("Executing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+    base.log_start()
     print(loadavg())
-    logging.debug("Finishing "+str(Path(__file__).resolve())+": "+whoami()+" ("+whosparent()+")")
+    base.log_end()
 ######################################################
 # Default clause
 ######################################################
 if __name__ == "__main__":
     main()
 
-logging.debug('Finished Running '+str(Path(__file__).resolve()) if __name__ == '__main__' else 'Finished Importing '+str(Path(__file__).resolve()))
+base.log_end()
 #EOF
