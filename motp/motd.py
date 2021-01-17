@@ -10,15 +10,16 @@
 ######################################################
 # Foundation, do not change
 ######################################################
-import warnings
 import logging
 from pathlib import Path
 from os.path import dirname, basename, isfile, join
 import sys
+from motp import modules, baselib
+
 # Set log output
 logdir = join(Path(dirname(__file__)), Path("log.log"))
 logging.basicConfig(filename=logdir, level=logging.DEBUG)
-logging.debug('Running '+str(Path(__file__).resolve()) if __name__ == '__main__' else 'Importing '+str(Path(__file__).resolve()))
+baselib.base.log_start()
 ######################################################
 # Imports
 ######################################################
@@ -26,14 +27,14 @@ logging.debug('Running '+str(Path(__file__).resolve()) if __name__ == '__main__'
 import glob
 import importlib
 
-from motp.baselib import base
-import motp.modules
+
 
 # dynamically read existing .py-Files in modules/ and import them
 allModules = glob.glob(join(dirname(__file__), "modules", "*.py"))
-motd_modulesList = [ basename(f)[:-3] for f in allModules if isfile(f) and not f.endswith('__init__.py')]
+motd_modulesList = [ basename(f)[:-3] 
+    for f in allModules if isfile(f) and not f.endswith('__init__.py')]
 for moduleItem in motd_modulesList:
-    importlib.import_module('motp.modules.'+moduleItem)
+    importlib.import_module('.modules.'+moduleItem, "motp")
 ######################################################
 # In-File Config
 ######################################################
@@ -47,14 +48,14 @@ for moduleItem in motd_modulesList:
 # Main
 ######################################################
 def main():
-    print(motp.baselib.base.colored("byellow", str(motp.modules.hw_cpu.loadavg())))
+    print(baselib.base.colored("byellow", str(modules.hw_cpu.loadavg())))
 ######################################################
-# Default clause
+# Default end
 ######################################################
 if __name__ == "__main__":
         main()
 
-logging.debug('Finished Running '+str(Path(__file__).resolve()) if __name__ == '__main__' else 'Importing '+str(Path(__file__).resolve()))
+baselib.base.log_end()
 logging.info("finished program")
 
 
