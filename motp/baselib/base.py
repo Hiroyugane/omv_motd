@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Base Module which is being used in every other python module
 # Status: being reworked
-######################################################
+#######################################################################
 # Info-Documentation
 ######################################################
 # Input: -
