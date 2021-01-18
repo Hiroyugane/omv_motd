@@ -51,7 +51,8 @@ def main():
     print("""
         this is a template, 
         if it is main, 
-        it will print out the output of all functions - for testing purposes
+        it will print out the output of all functions - 
+        for testing purposes
         try to not get above 80 characters per line, please.
         For more info, read PEP0008
         """)
