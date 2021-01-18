@@ -2,7 +2,7 @@
 #Encoding: UTF-8
 """
 This module will be scraping everything to do with RAM
-Status: copied over existing code that will be reworked
+Status: reworked and functional
 Input: -
 Output-Example: 
 {
