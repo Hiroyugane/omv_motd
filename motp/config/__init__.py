@@ -20,11 +20,7 @@ import inspect
 
 from ..baselib import base
 
-logging.debug('Running '+str(Path(__file__).resolve()) if __name__ == '__main__' else 'Importing '+str(Path(__file__).resolve()))
-def whoami():
-    return inspect.stack()[1][3]
-def whosparent():
-    return inspect.stack()[2][3]
+base.log_start()
 ######################################################
 # Imports
 ######################################################
@@ -37,6 +33,6 @@ def whosparent():
 ######################################################
 # Default clause
 ######################################################
-logging.debug('Finished Running '+str(Path(__file__).resolve()) if __name__ == '__main__' else 'Finished Importing '+str(Path(__file__).resolve()))
+base.log_end()
 #EOF
 
