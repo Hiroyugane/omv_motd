@@ -12,18 +12,19 @@
 # To-Do, Ideas:
 #      
 ######################################################
-# Foundation, do not change
+# Prework
 ######################################################
 import warnings
 import logging
+import logging.config
 from pathlib import Path
 from os.path import dirname, basename, isfile, join
 import inspect
+from .baselib import base
 
+logging.config.fileConfig(join(dirname(__file__), "config", "logging.conf"))
 
-logdir = join(Path(dirname(__file__)), Path("log.log"))
-logging.basicConfig(filename=logdir, level=logging.DEBUG)
-logging.debug('Running '+str(Path(__file__).resolve()) if __name__ == '__main__' else 'Importing '+str(Path(__file__).resolve()))
+base.log_start()
 ######################################################
 # Imports
 ######################################################
@@ -47,6 +48,6 @@ import sys
 ######################################################
 # Default clause
 ######################################################
-logging.debug('Finished Running '+str(Path(__file__).resolve()) if __name__ == '__main__' else 'Finished Importing '+str(Path(__file__).resolve()))
+base.log_end()
 #EOF
 

@@ -18,8 +18,8 @@ import sys
 from motp import modules, baselib
 
 # Set log output
-logdir = join(Path(dirname(__file__)), Path("log.log"))
-logging.basicConfig(filename=logdir, level=logging.DEBUG)
+#logdir = join(Path(dirname(__file__)), Path("log.log"))
+#logging.basicConfig(filename=logdir, level=logging.DEBUG)
 baselib.base.log_start()
 ######################################################
 # Imports
