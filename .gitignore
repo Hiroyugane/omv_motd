@@ -2,3 +2,4 @@ configtest.ini
 testing_prepare-environment.py
 __pycache__
 logs/
+.vscode

@@ -50,6 +50,7 @@ for moduleItem in motd_modulesList:
 ######################################################
 def main():
     print(baselib.base.colored("byellow", str(modules.hw_cpu.loadavg())))
+    print(baselib.base.colored("bggreen", str(modules.hw_ram.allocation())))
 ######################################################
 # Default end
 ######################################################
