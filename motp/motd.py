@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
+# Will be the mainfile that will put together scraping and formats
+# All content is raw leftovers from original fork. 
+# Will be reworked completely.
 # Status:   copied over existing code and split up code to module.
-#           Will be the "central" piece that will put together info-gathering and formatting
-#           All content is raw leftovers from original fork. Will be reworked completely.
 #######################################################################
 # Info-Documentation
 ######################################################
@@ -24,13 +25,13 @@ baselib.base.log_start()
 # Imports
 ######################################################
 
-import glob
+from glob import glob
 import importlib
 
 
 
 # dynamically read existing .py-Files in modules/ and import them
-allModules = glob.glob(join(dirname(__file__), "modules", "*.py"))
+allModules = glob(join(dirname(__file__), "modules", "*.py"))
 motd_modulesList = [ basename(f)[:-3] 
     for f in allModules if isfile(f) and not f.endswith('__init__.py')]
 for moduleItem in motd_modulesList:
@@ -110,8 +111,6 @@ logging.info("finished program")
 # #docker_status()
 
 
-# #Main-process
-# #if-clause if process is main or used as a library
 # def main():
 #     # banner is the logo on top (figlet f.e.) (rename banner to sth. like Header. Banner is a legal notice usually)
 #     banner_file = '~/log.log'
@@ -131,6 +130,3 @@ logging.info("finished program")
 #     f.close()
 #     # finally print it all out 
 #     print(output)
-
-# if __name__ == "__main__":
-#     main()

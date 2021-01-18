@@ -96,7 +96,8 @@ except Exception:
             )
     except Exception:
         logging.critical(
-            "config_main.ini not found, backup couldn't be restored, aborting"
+            """config_main.ini not found, 
+            backup couldn't be restored, aborting"""
             )
     else:
         logging.warn(
@@ -258,40 +259,3 @@ if __name__ == "__main__":
     main()
 log_end()
 #EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-if __name__ == "__main__":
-    color_test()
