@@ -15,12 +15,23 @@ import logging
 from pathlib import Path
 from os.path import dirname, basename, isfile, join
 import sys
-from motp import modules, baselib
+from .. import modules
+from . import base
+import os 
 
-# Set log output
-#logdir = join(Path(dirname(__file__)), Path("log.log"))
-#logging.basicConfig(filename=logdir, level=logging.DEBUG)
-baselib.base.log_start()
+# try:
+#     os.mkdir(join("motp", "logs"))
+# except FileExistsError:
+#     pass
+# finally:
+#     logging.config.fileConfig(join(
+#         dirname(__file__), 
+#         "config", 
+#         "logging.conf")
+#         )
+
+
+base.log_start()
 ######################################################
 # Imports
 ######################################################
@@ -31,7 +42,7 @@ import importlib
 
 
 # dynamically read existing .py-Files in modules/ and import them
-allModules = glob(join(dirname(__file__), "modules", "*.py"))
+allModules = glob(join(dirname(__file__), "..", "modules", "*.py"))
 motd_modulesList = [ basename(f)[:-3] 
     for f in allModules if isfile(f) and not f.endswith('__init__.py')]
 for moduleItem in motd_modulesList:
@@ -49,15 +60,15 @@ for moduleItem in motd_modulesList:
 # Main
 ######################################################
 def main():
-    print(baselib.base.colored("byellow", str(modules.hw_cpu.loadavg())))
-    print(baselib.base.colored("bggreen", str(modules.hw_ram.allocation())))
+    print(base.colored("bblue", str(modules.hw_cpu.loadavg())))
+    print(base.colored("bggreen", str(modules.hw_ram.allocation())))
 ######################################################
 # Default end
 ######################################################
 if __name__ == "__main__":
         main()
 
-baselib.base.log_end()
+base.log_end()
 logging.info("finished program")
 
 
