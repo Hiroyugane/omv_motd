@@ -18,15 +18,21 @@ import warnings
 import logging
 import logging.config
 from pathlib import Path
+import os
 from os.path import dirname, basename, isfile, join
 import inspect
 from .baselib import base
 
-logging.config.fileConfig(join(
-    dirname(__file__), 
-    "config", 
-    "logging.conf")
-    )
+try:
+    os.mkdir(join("motp", "logs"))
+except FileExistsError:
+    pass
+finally:
+    logging.config.fileConfig(join(
+        dirname(__file__), 
+        "config", 
+        "logging.conf")
+        )
 
 base.log_start()
 ######################################################
