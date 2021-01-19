@@ -12,9 +12,11 @@ Once it will be an actual (beta)-release, anyone should be able to use it on deb
 > For planned features, take a look at the todo.md in the root directory.
 
 ## Current version 
+Running on linux as it's supposed to (ubuntu):
+![Alt text](/docs/images/0-0-1_linux.png?raw=true "Ubuntu /etc/update-motd.d/")
 
-![Alt text](/docs/images/0-0-1.png?raw=true "Ubuntu /etc/update-motd.d/")
-
+Running on windows (incompatible OS):
+![Alt text](/docs/images/0-0-1_windows.png?raw=true "windows /etc/update-motd.d/")
 ## First version (synced fork)
 
 ![Alt text](/docs/images/0-0-0pre1.png?raw=true "Ubuntu /etc/update-motd.d/")
