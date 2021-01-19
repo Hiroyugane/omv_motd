@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.0.1pre5 // 17.02.2020, non-working
+
+* Split up in multiple files
+* created scheme.md
+* created config.ini
+  * inserted colors
+* heavily rearranged code
+* started working on a rework of module_users.py (was "def users()" before)
+
 ## 0.0.1pre4 // 11.10.2019
 
 * finished commenting and started documenting organization-structures for the program and other stuff in doc/organization.md

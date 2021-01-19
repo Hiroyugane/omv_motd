@@ -28,3 +28,10 @@
     - put the final 1.0.0 release onto the master branch and update the readme and other types of documentation, aswell as setup tutorial. license-type maybe? etc.
 
 > To be continued and filled with more info as we go along
+
+
+
+## Notes 
+Add rulesets for formatting stuff (ruleset: cpu_error)
+Add config for fallback-returnvalues (cpu_load: 9.99)
+Don't show errormessages/warnings directly in motd but add in a field that shows you a message if errors happened ("The motd found error during execution, information displayed may be faulty. Please check the logs at root_/log.log")

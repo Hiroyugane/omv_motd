@@ -230,9 +230,9 @@ def sysinfo():
             'total': int(raw_swap[1])}
     swap['ratio'] = 0.0 if swap['total'] == 0 else float(swap['used'])/swap['total']
 
-    # (CPU?) don't know what that does? count processes? if so, make it more detailed
+    # counts processes.  make it more detailed
     # (who owns how many processes, etc. with ratios maybe)
-    # if it's processes then put it to CPU section or to misc.
+    # put it to CPU section or to misc.
     proc_ps = run_cmd('/bin/ps -Afl | wc -l')
 
     # USERS: looks for all existing users
