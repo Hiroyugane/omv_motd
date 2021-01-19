@@ -24,10 +24,11 @@ import inspect
 from .baselib import base
 
 try:
-    os.mkdir(join("motp", "logs"))
+    os.mkdir(join(dirname(__file__), "logs"))
 except FileExistsError:
     pass
 finally:
+    os.environ["MOTP_LOGDIR"] = join(dirname(__file__), "logs")
     logging.config.fileConfig(join(
         dirname(__file__), 
         "config", 

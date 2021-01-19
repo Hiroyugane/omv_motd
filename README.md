@@ -8,9 +8,17 @@ Once it will be an actual (beta)-release, anyone should be able to use it on deb
 ## Roadmap-preview
 
 > this is an example-output of what the program should achieve to do when on version 1.0.0
-![Alt text](/image/roadmap-preview.png?raw=true "Ubuntu /etc/update-motd.d/")
+![Alt text](/docs/images/roadmap-preview.png?raw=true "Ubuntu /etc/update-motd.d/")
 > For planned features, take a look at the todo.md in the root directory.
 
-## Current version (synced fork)
+## Current version 
 
-![Alt text](/image/0-0-0pre1.png?raw=true "Ubuntu /etc/update-motd.d/")
+![Alt text](/docs/images/0-0-1.png?raw=true "Ubuntu /etc/update-motd.d/")
+
+## First version (synced fork)
+
+![Alt text](/docs/images/0-0-0pre1.png?raw=true "Ubuntu /etc/update-motd.d/")
+
+## Example of fork-source
+
+![Alt text](/docs/images/original.png?raw=true "Ubuntu /etc/update-motd.d/")
