@@ -15,7 +15,7 @@ import logging
 from pathlib import Path
 from os.path import dirname, basename, isfile, join
 import sys
-from .. import modules
+from .. import scraper
 from . import base
 import os 
 
@@ -42,11 +42,11 @@ import importlib
 
 
 # dynamically read existing .py-Files in modules/ and import them
-allModules = glob(join(dirname(__file__), "..", "modules", "*.py"))
-motd_modulesList = [ basename(f)[:-3] 
-    for f in allModules if isfile(f) and not f.endswith('__init__.py')]
-for moduleItem in motd_modulesList:
-    importlib.import_module('.modules.'+moduleItem, "motp")
+allScraper = glob(join(dirname(__file__), "..", "scraper", "*.py"))
+motd_scraperList = [ basename(f)[:-3] 
+    for f in allScraper if isfile(f) and not f.endswith('__init__.py')]
+for moduleItem in motd_scraperList:
+    importlib.import_module('.scraper.'+moduleItem, "motp")
 ######################################################
 # In-File Config
 ######################################################
@@ -60,8 +60,8 @@ for moduleItem in motd_modulesList:
 # Main
 ######################################################
 def main():
-    print(base.colored("bblue", str(modules.hw_cpu.loadavg())))
-    print(base.colored("bggreen", str(modules.hw_ram.allocation())))
+    print(base.colored("bblue", str(scraper.hw_cpu.loadavg())))
+    print(base.colored("bggreen", str(scraper.hw_ram.allocation())))
 ######################################################
 # Default end
 ######################################################
