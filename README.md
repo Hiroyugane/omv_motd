@@ -1,5 +1,5 @@
 # Message of the python
-
+> Version: 0-3-1 unstable
 ## About this fork
 
 This fork will become a customized and more structurized approach to the original motd(-python)-script by fedya, which got forked.
