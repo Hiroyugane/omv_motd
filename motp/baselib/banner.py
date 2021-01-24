@@ -20,10 +20,10 @@ import logging
 from pathlib import Path
 from os.path import dirname, basename, isfile, join
 import sys
-from .. import scraper
-from . import base
 import os 
+import shutil
 
+from . import base
 base.log_start
 ########################################################################################
 # Metadata                                                                             #
@@ -39,9 +39,7 @@ __status__ = "WIP"
 ########################################################################################
 # In-File Config                                                                       #
 ########################################################################################
-bannerPath = os.path.join(
-    os.path.dirname(__file__), '..', 'config', 'banner.txt'
-    )
+bannerPath = os.path.join(base.configPath, 'banner.txt')
 BannerStart = 10 #Start read on Line X
 function_fallbackReturn = {
 }
@@ -61,7 +59,7 @@ def read_file():
             if m < BannerStart-1:
                 pass
             else: 
-                BannerLines.append(n)
+                BannerLines.append(n.replace('\n', ''))
                 if len(n) > BannerLength:
                     BannerLength = len(n) 
             m += 1 
@@ -69,6 +67,23 @@ def read_file():
         Banner["Height"] = len(BannerLines)
         Banner["Length"] = BannerLength
         Banner["Lines"] = BannerLines
+    except FileNotFoundError:
+        base.log_exception()
+        try:
+            shutil.copyfile(
+                os.path.join(base.configPath, 'banner.txt.bak'), 
+                os.path.join(bannerPath)
+                )
+        except Exception:
+            logging.critical(
+                """banner not found, 
+                backup couldn't be restored, aborting"""
+                )
+        else:
+            logging.warn(
+                """copied banner.txt.bak to banner.txt 
+                because python couldn't find a valid banner"""
+                )
     except Exception:  
         base.log_exception()
         return "Error"

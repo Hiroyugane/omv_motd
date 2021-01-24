@@ -1,0 +1,15 @@
+This file is used for getting the banner-ascii-art. 
+Reading the ascii art starts at line 10, everything before can be used
+ for commenting purposes
+The length should stay between 60-120 characters, height is up to you
+(depending on your setup and use-case)
+Amount of comment-Lines can be configured 
+
+    5    10   15   20        30        40        50        60        70        80        90        100       110       120       130       140       150
+----+----|----+----#----+----|----+----#----+----X----+----|////+////#////+////|////+////#////+////X////+////|////+////#----+----|----+----#----+----X
+.___  ___.          ______          .___________.      .______   
+|   \/   |         /  __  \         |           |      |   _  \  
+|  \  /  |  ______|  |  |  |  ______`---|  |----`______|  |_)  | 
+|  |\/|  | |______|  |  |  | |______|   |  |    |______|   ___/  
+|  |  |  |        |  `--'  |            |  |           |  |      
+|__|  |__|         \______/             |__|           | _|      

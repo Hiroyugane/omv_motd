@@ -80,7 +80,8 @@ log_start()
 ######################################################
 #Read Config
 config = ConfigParser()
-configpath = os.path.join(os.path.dirname(__file__), '..', 'config')
+global configPath
+configPath = os.path.join(os.path.dirname(__file__), '..', 'config')
 try:
     config.read(os.path.join(
         os.path.dirname(__file__), 
@@ -91,8 +92,8 @@ try:
 except Exception:
     try:
         shutil.copyfile(
-            os.path.join(configpath, 'config_main.ini.back'), 
-            os.path.join(configpath, 'config_main.ini')
+            os.path.join(configPath, 'config_main.ini.bak'), 
+            os.path.join(configPath, 'config_main.ini')
             )
     except Exception:
         logging.critical(
